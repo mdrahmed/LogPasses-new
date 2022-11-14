@@ -6,7 +6,8 @@ CLANG_LFL=$(shell llvm-config-14 --ldflags --libs)
 CLANG=clang++-14
 PASS=instrument.so
 #PASS_SRC=funcCalls2.cpp
-PASS_SRC=messagearrivedPublish.cpp
+#PASS_SRC=messagearrivedPublish.cpp
+PASS_SRC=messageAndPublish2.cpp
 LL=example.ll
 CPP_file=example.cpp
 
