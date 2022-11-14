@@ -74,13 +74,13 @@ bool AFLCoverage::runOnModule(Module &M) {
                 raw_string_ostream rso(s);
 		rso << F.getName() << " ";
 		arguments.push_back(rso.str());
-			for(auto i = F.arg_begin();i!=F.arg_end();++i){
-				errs()<<"\narguments: "<<*i<<"\n";
-				//std::string s;
-				//raw_string_ostream rso(s);
-				rso << *i<<"\n";
-				arguments.push_back(rso.str());
-			}
+		for(auto i = F.arg_begin();i!=F.arg_end();++i){
+			errs()<<"\narguments: "<<*i<<"\n";
+			//std::string s;
+			//raw_string_ostream rso(s);
+			rso << *i<<"\n";
+			arguments.push_back(rso.str());
+		}
 		//}
 		
 		for (auto &BB : F) {
