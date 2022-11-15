@@ -21,7 +21,8 @@ int main(int argc, const char** argv) {
     }
     else{
         printf("a is less than 10");
-	add(a,b);
+	//add(a,b);
+	add(10,20);
     }
     return 0;
 }

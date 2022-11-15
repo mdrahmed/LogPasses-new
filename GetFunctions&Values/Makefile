@@ -3,7 +3,8 @@ CLANG_CFL=$(shell llvm-config-14 --cxxflags) -Wl,-znodelete -fno-rtti -fpic $(CX
 CLANG_LFL=$(shell llvm-config-14 --ldflags --libs)
 
 CLANG=clang++-14
-PASS=function.so
+#PASS=function.so
+PASS=func.so
 #PASS_SRC=functions_analysis.cpp
 #PASS_SRC=funcAnalysis.cpp
 PASS_SRC=funcCalls.cpp

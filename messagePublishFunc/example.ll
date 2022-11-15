@@ -62,16 +62,14 @@ define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #1 {
   %14 = load i32, i32* %6, align 4
   %15 = load i32, i32* %7, align 4
   %16 = call noundef i32 @_Z8subtractii(i32 noundef %14, i32 noundef %15)
-  br label %22
+  br label %20
 
 17:                                               ; preds = %2
   %18 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3, i64 0, i64 0))
-  %19 = load i32, i32* %6, align 4
-  %20 = load i32, i32* %7, align 4
-  %21 = call noundef i32 @_Z3addii(i32 noundef %19, i32 noundef %20)
-  br label %22
+  %19 = call noundef i32 @_Z3addii(i32 noundef 10, i32 noundef 20)
+  br label %20
 
-22:                                               ; preds = %17, %12
+20:                                               ; preds = %17, %12
   ret i32 0
 }
 
