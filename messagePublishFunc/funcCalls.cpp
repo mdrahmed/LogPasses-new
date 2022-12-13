@@ -96,7 +96,7 @@ void visitBB(BasicBlock &BB, Value* condition){
                         IRBuilder<> builder(&(*CI));
 
                         // The format string for the printf function, declared as a global literal
-                        std::string format("arguments to %s: \n");
+                        std::string format("\narguments to %s: \n");
                         for (auto &&arg : arg_values) {
                                 format += " * %lu\n";
                         }

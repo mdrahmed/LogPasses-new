@@ -17,7 +17,8 @@ int main(int argc, const char** argv) {
     
     if(a > 10){
         printf("a is greater than 10");
-	subtract(a,b);
+	//subtract(a,b);
+	subtract(a);
     }
     else{
         printf("a is less than 10");

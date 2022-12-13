@@ -55,23 +55,22 @@ define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #1 {
   %9 = call i32 (i8*, ...) @scanf(i8* noundef getelementptr inbounds ([6 x i8], [6 x i8]* @.str.1, i64 0, i64 0), i32* noundef %6, i32* noundef %7)
   %10 = load i32, i32* %6, align 4
   %11 = icmp sgt i32 %10, 10
-  br i1 %11, label %12, label %17
+  br i1 %11, label %12, label %16
 
 12:                                               ; preds = %2
   %13 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([21 x i8], [21 x i8]* @.str.2, i64 0, i64 0))
   %14 = load i32, i32* %6, align 4
-  %15 = load i32, i32* %7, align 4
-  %16 = call noundef i32 @_Z8subtractii(i32 noundef %14, i32 noundef %15)
-  br label %22
+  %15 = call noundef i32 @_Z8subtracti(i32 noundef %14)
+  br label %21
 
-17:                                               ; preds = %2
-  %18 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3, i64 0, i64 0))
-  %19 = load i32, i32* %6, align 4
-  %20 = load i32, i32* %7, align 4
-  %21 = call noundef i32 @_Z3addii(i32 noundef %19, i32 noundef %20)
-  br label %22
+16:                                               ; preds = %2
+  %17 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([18 x i8], [18 x i8]* @.str.3, i64 0, i64 0))
+  %18 = load i32, i32* %6, align 4
+  %19 = load i32, i32* %7, align 4
+  %20 = call noundef i32 @_Z3addii(i32 noundef %18, i32 noundef %19)
+  br label %21
 
-22:                                               ; preds = %17, %12
+21:                                               ; preds = %16, %12
   ret i32 0
 }
 
@@ -91,4 +90,4 @@ attributes #2 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 !2 = !{i32 7, !"PIE Level", i32 2}
 !3 = !{i32 7, !"uwtable", i32 1}
 !4 = !{i32 7, !"frame-pointer", i32 2}
-!5 = !{!"Ubuntu clang version 14.0.6-++20221030064722+f28c006a5895-1~exp1~20221030064759.169"}
+!5 = !{!"Ubuntu clang version 14.0.6"}

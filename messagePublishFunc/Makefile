@@ -9,10 +9,12 @@ PASS=instrument.so
 #PASS_SRC=messagearrivedPublish.cpp
 #PASS_SRC=funcAnalysis.cpp
 #PASS_SRC=funcNArg.cpp
-PASS_SRC=funcCalls.cpp
+#PASS_SRC=funcCalls.cpp
 #PASS_SRC=messageAndPublish2.cpp
+PASS_SRC=valueMsgPub.cpp # getting actual values from msg and publish
 LL=example.ll
 CPP_file=example.cpp
+Objects=ex instrument.so *.ll
 
 all: $(LL) $(PASS) ex 
 	
@@ -25,3 +27,6 @@ $(PASS): $(PASS_SRC)
 ex: $(CPP_file)  
 	$(CLANG) -o $@ -flegacy-pass-manager -g -Xclang -load -Xclang ./instrument.so $<
 
+.PHONY: clean
+clean:
+	rm $(Objects)
