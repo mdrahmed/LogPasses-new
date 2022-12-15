@@ -99,6 +99,7 @@ void visitBB(BasicBlock &BB, Value* condition){
                         std::string format("\narguments to %s: \n");
                         for (auto &&arg : arg_values) {
                                 format += " * %lu\n";
+				//errs()<<format<<"\n";
                         }
                         Value *str = builder.CreateGlobalStringPtr(format, "");
 
@@ -119,6 +120,7 @@ void visitBB(BasicBlock &BB, Value* condition){
                 }
         }
 }
+
 bool AFLCoverage::runOnModule(Module &M) {
 
         LLVMContext &context = M.getContext();

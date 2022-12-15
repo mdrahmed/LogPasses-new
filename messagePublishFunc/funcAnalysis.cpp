@@ -75,14 +75,15 @@ bool AFLCoverage::runOnModule(Module &M) {
                 raw_string_ostream rso(s);
 		rso << F.getName() << " ";
 		arg_strings.push_back(rso.str());
-			for(auto i = F.arg_begin();i!=F.arg_end();++i){
-				errs()<<"\narg_strings: "<<*i<< ", name = " << i->getName() <<"\n";
-				//std::string s;
-				//raw_string_ostream rso(s);
-				rso << *i <<"\n";
-				arg_strings.push_back(rso.str());
-				arg_values.push_back(i);
-			}
+		for(auto i = F.arg_begin();i!=F.arg_end();++i){
+			errs()<<"\narg_strings: "<<*i<< ", name = " << i->getName() <<"\n";
+			//std::string s;
+			//raw_string_ostream rso(s);
+			rso << *i <<"\n";
+			arg_strings.push_back(rso.str());
+			arg_values.push_back(i);
+		}
+		
 		//}
 		
 	//	BasicBlock& first_bb = *(F.begin();
@@ -128,14 +129,17 @@ bool AFLCoverage::runOnModule(Module &M) {
 			*/
 			
 			{
-				std::string format("\narg_values: ");
+				//std::string format("\narg_values: ");
+				std::string format("\narguments to %s: \n");
 				for (size_t i = 0; i < arg_values.size(); ++i) {
-					format += " %s = (0x%lx)\n";
+					//format += " %s = (0x%lx)\n";
+					format += " * %lu\n";
 				}
 
 				Value *str = builder.CreateGlobalStringPtr(format, "");
 				std::vector<Value *> argsV({str});
-
+				//errs()<<BB.getFunction()<<"\n";
+				//argsV.push_back(builder.CreateGlobalStringPtr());
 				for (auto &v : arg_values) {
 					argsV.push_back(builder.CreateGlobalStringPtr(v->getName(), ""));
 					argsV.push_back(v);

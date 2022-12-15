@@ -63,13 +63,12 @@ bool AFLCoverage::runOnModule(Module &M) {
 		if(F.getName().contains("subtract")){
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish")){
 			errs()<<"found:"<<F.getName()<<"\n";
-			Function* msg = &F;
-			if(msg != nullptr){
+			//Function* msg = &F;
+			if(!F.isDeclaration()){
 				//errs()<<"Skipping the null called function\n";
 				//continue;
-			
 		
-				auto &BB = msg->getEntryBlock();        
+				auto &BB = F.getEntryBlock();        
 				errs()<<BB<<"\n";
 				std::vector<std::string> arguments;
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
