@@ -145,14 +145,26 @@ bool AFLCoverage::runOnModule(Module &M) {
 		rso << F.getName() << " ";
 		arg_strings.push_back(rso.str());
 		for(auto i = F.arg_begin();i!=F.arg_end();++i){
-			errs()<<"\narg_strings: "<<*i<< ", name = " << i->getName() <<"\n";
+			//errs()<<"\narg_strings: "<<*i<< ", name = " << i->getName() <<"\n";
 			//std::string s;
 			//raw_string_ostream rso(s);
 			rso << *i <<"\n";
 			arg_strings.push_back(rso.str());
 			arg_values.push_back(i);
 		}
+	
+	//edits to inject print before the function call	
+	//	unsigned vid = F.getValueID();
+	//	errs()<<"vid: "<<vid<<"\n";
 
+	//	ValueName* vName = F.getValueName();
+	//	errs()<<"Value Name: "<<vName<<"\n";
+	//	errs()<<"Value Name: "<<*vName<<"\n";
+	//	
+	//	errs()<<"Name: "<<vid.getName()<<"\n";
+		//errs()<<"Basic Block: "<<vName->isUsedInBasicBlock()<<"\n";
+		
+	//Done
 		//if(F.getName().contains("subtract")){
 		//if(F.getName().contains("llvm.dbg"))
 		//	continue;
@@ -161,13 +173,55 @@ bool AFLCoverage::runOnModule(Module &M) {
 		//if(F.getName().contains("publish")){
 		//	errs()<<"publish function found: "<<F.getName()<<"\n";
 		//}
-		if(F.getName().contains("message_arrived") || F.getName().contains("publish")){
+		
+		//This condition is for testbed code
+		if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder")){
+		
 		//if(F.getName().contains("message_arrived") || F.getName().contains("_ZN2ft20TxtMqttFactoryClient14publishSLD_AckENS_15TxtSldAckCode_tENS_11TxtWPType_tEil")){
 		//if(F.getName().contains("message_arrived")){
-			errs()<<"found:"<<F.getName()<<"\n";
+			//errs()<<"found:"<<F.getName()<<"\n";
 			//Function* msg = &F;
-			errs()<<"After declaring msg\n";
+			//errs()<<"After declaring msg\n";
 			//if(msg != nullptr && F.isDeclaration()==false){
+			
+			for(auto ui=F.use_begin();ui!=F.use_end();ui++){
+				errs()<<F.getName()<<" is called from this callInst: "<<*ui->getUser()<<"\n";
+				//errs()<<"Parent: "<<ui->getUser()->getParent()<<"\n";
+				//Instruction *I = *ui->getUser();
+				if(auto I = dyn_cast<Instruction>(ui->getUser())){
+					errs()<<"Instruction: "<<*I<<"\n";
+					errs()<<"Instruction Parent: "<<*I->getParent()<<"\n";
+					auto *BB = I->getParent();
+					Function* userFunction = BB->getParent();
+					//errs()<<"User function: "<<*BB->getParent()<<"\n";
+					
+					errs()<<"User Function: "<<userFunction->getName()<<"\n";
+					BasicBlock::iterator IP = BB->getFirstInsertionPt();
+					errs()<<"first inst pointer: "<<*IP<<"\n";
+					IRBuilder<> builder(&(*IP));
+					
+					std::vector<std::string> user;
+					std::string format("\nUser: ");
+					std::string s;
+					raw_string_ostream rso(s);
+					rso << userFunction->getName()<<" is calling "<<F.getName()<<"\n";
+					rso << F.getName() << " is called from this callInst"<<*ui->getUser()<<"\n";
+					user.push_back(rso.str());
+
+					for (size_t i = 0; i < user.size(); ++i) {
+						format += " %s\n";
+					}
+					Value *str = builder.CreateGlobalStringPtr(format, "");
+		
+					std::vector<Value *> argsV({str});
+		
+					for (auto &s : user) {
+						argsV.push_back(builder.CreateGlobalStringPtr(s, ""));
+					}
+					builder.CreateCall(printfFunc, argsV, "calltmp");				
+				}
+			}
+			
 			if(!F.isDeclaration()){
 				//errs()<<"checking if it's nullptr:"<<*msg<<"\n";
 				//errs()<<"Skipping the null called function\n";
@@ -175,41 +229,42 @@ bool AFLCoverage::runOnModule(Module &M) {
 			
 				//if(msg->getEntryBlock() != ""){
 				auto &BB = F.getEntryBlock();        
-				errs()<<"got entry block: "<<BB<<"\n";
+				//errs()<<"got entry block: "<<BB<<"\n";
 				//visitBB(BB,NULL);
 
-// starting arguments				
+// starting arguments		
+					
 				std::vector<std::string> arguments;
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
 				IRBuilder<> builder(&(*IP));
-		
-				//// The format string for the printf function, declared as a global literal
-				std::string format("\narguments: ");
-
-				std::string s;
-        		        raw_string_ostream rso(s);
-				rso << F.getName() << " ";
-				errs()<<"rso.str():"<<rso.str()<<"\n";
-				arguments.push_back(rso.str());
-				for(auto i = F.arg_begin();i!=F.arg_end();++i){
-					errs()<<"\narguments: "<<*i<<"\n";
-					//std::string s;
-					//raw_string_ostream rso(s);
-					rso << *i;
-					errs()<<"*i: "<<*i<<"\n";
+				{
+					//// The format string for the printf function, declared as a global literal
+					std::string format("\narguments: ");
+					std::string s;
+        			        raw_string_ostream rso(s);
+					rso << F.getName() << " ";
+					//errs()<<"rso.str():"<<rso.str()<<"\n";
 					arguments.push_back(rso.str());
-				}
-				for (size_t i = 0; i < arguments.size(); ++i) {
-					format += " %s\n";
-				}
-				Value *str = builder.CreateGlobalStringPtr(format, "");
+					for(auto i = F.arg_begin();i!=F.arg_end();++i){
+						//errs()<<"\narguments: "<<*i<<"\n";
+						//std::string s;
+						//raw_string_ostream rso(s);
+						rso << *i;
+						//errs()<<"*i: "<<*i<<"\n";
+						arguments.push_back(rso.str());
+					}
+					for (size_t i = 0; i < arguments.size(); ++i) {
+						format += " %s\n";
+					}
+					Value *str = builder.CreateGlobalStringPtr(format, "");
 		
-				std::vector<Value *> argsV({str});
+					std::vector<Value *> argsV({str});
 		
-				for (auto &s : arguments) {
-					argsV.push_back(builder.CreateGlobalStringPtr(s, ""));
+					for (auto &s : arguments) {
+						argsV.push_back(builder.CreateGlobalStringPtr(s, ""));
+					}
+					builder.CreateCall(printfFunc, argsV, "calltmp");				
 				}
-				builder.CreateCall(printfFunc, argsV, "calltmp");				
 // till now arguments		
 				
 				{
