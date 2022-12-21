@@ -6,4 +6,5 @@ This are the most important passes I need to create a new loggin system.
  - The Functions&ValuesWithArguments pass will generate all the function names, values and arguments.
 
 
-The messagePublishFunc will work perfectly fine. 
+Inside messagePublishFunc there is a valueMsgPub.cpp file which is the pass to get the function names, values, arguments and the user function of the function I am checking. Check the folder for details.
+
