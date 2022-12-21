@@ -183,7 +183,8 @@ bool AFLCoverage::runOnModule(Module &M) {
 			//Function* msg = &F;
 			//errs()<<"After declaring msg\n";
 			//if(msg != nullptr && F.isDeclaration()==false){
-			
+
+//This for loop will get the user function		
 			for(auto ui=F.use_begin();ui!=F.use_end();ui++){
 				errs()<<F.getName()<<" is called from this callInst: "<<*ui->getUser()<<"\n";
 				//errs()<<"Parent: "<<ui->getUser()->getParent()<<"\n";
