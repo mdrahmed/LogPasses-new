@@ -131,14 +131,13 @@ void visitBB(BasicBlock &BB, Value* condition){
 bool CPSTracker::runOnModule(Module &M) {
 	
 	LLVMContext &context = M.getContext();
-        Type *intType = Type::getInt32Ty(context);
-
+        
+	Type *intType = Type::getInt32Ty(context);
         std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
 
 	//Function* msg = M.getFunction("_ZN8callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE");
-	
 	//Function* msg = M.getFunction("_ZN8callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE");
 	//errs()<<*msg<<"\n";
 	for (auto &F:M){
@@ -159,7 +158,7 @@ bool CPSTracker::runOnModule(Module &M) {
 	
 		
 	//Done
-		if(F.getName().contains("subtract")){
+		//if(F.getName().contains("subtract")){
 		//if(F.getName().contains("llvm.dbg"))
 		//	continue;
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish")){
@@ -167,9 +166,10 @@ bool CPSTracker::runOnModule(Module &M) {
 		//if(F.getName().contains("publish")){
 		//	errs()<<"publish function found: "<<F.getName()<<"\n";
 		//}
-		
+		//if(F.getName() == "_ZN2ft23action_listener_publishC1Ev"){
 		//This condition is for testbed code & got all functions needed for VGR graph.
-		//if(F.getName().contains("message_arrived") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
+		
+		if(F.getName().contains("message_arrived") || F.getName()== "_ZN2ft23action_listener_publishC1Ev" ||F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 		
 		//This for loop will get the user function		
@@ -202,20 +202,31 @@ bool CPSTracker::runOnModule(Module &M) {
 			
 			if(!F.isDeclaration()){
 				auto &BB = F.getEntryBlock();        
-			// starting arguments		
+				// starting arguments		
 				std::vector<std::string> arguments;
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
 				IRBuilder<> builder(&(*IP));
 				
-			// Injecting World time
+				// Injecting World time
                        		std::time_t now = std::time(0);
                        		char* dt = ctime(&now);
-                       		errs()<<dt;
+                       		errs()<<"dt: "<<dt<<"Unix time: "<<now<<"\n";
+			
+				// date and time
 				Value *str = builder.CreateGlobalStringPtr(dt, "str");
                         	std::vector<Value *> worldClock({str});
                         	builder.CreateCall(printfFunc, worldClock, "calltmp");
-			
-			//Process start time is printed here
+				
+				// Unix time
+				//raw_string_ostream rsoT("Time: ");
+				std::stringstream ss;
+				ss <<"Unix time: "<< now;
+				std::string ts = ss.str();
+				Value *unixT = builder.CreateGlobalStringPtr(ts, "str");
+                                std::vector<Value *> unixTime({unixT});
+                                builder.CreateCall(printfFunc, unixTime, "calltmp");
+
+				//Process start time is printed here
                         	auto start = TimeRecord::getCurrentTime(false).getProcessTime();
                         	errs()<<"Process start time:"<< llvm::format("%0.1f", start) << "ms\n";
 
@@ -240,7 +251,8 @@ bool CPSTracker::runOnModule(Module &M) {
 					}
 					builder.CreateCall(printfFunc, argsV, "calltmp");				
 				}
-		// till now arguments		
+				// till now arguments
+				// Starting to record values		
 				{
 				// using the format specifier for printing the values
 					std::string format("arg_values: ");
@@ -249,6 +261,8 @@ bool CPSTracker::runOnModule(Module &M) {
 						format += " %s = %d\n";
 					}
 				// creating the string from format, then converting it into vector
+					//StringRef ft = str(format);
+					//Value *str = builder.CreateGlobalStringPtr(StringRef(format), "");
 					Value *str = builder.CreateGlobalStringPtr(format, "");
 					std::vector<Value *> argsV({str});
 					for (auto &v : arg_values) {
@@ -261,11 +275,10 @@ bool CPSTracker::runOnModule(Module &M) {
 					        Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
 					        argsV.push_back(Int32Result);
 					}
-					
 					builder.CreateCall(printfFunc, argsV, "calltmp"); 
 				}
 
-			//Process end time is printed here
+				//Process end time is printed here
 				auto end = TimeRecord::getCurrentTime(false).getProcessTime();
                                 errs()<<"Process end time:"<< llvm::format("%0.1f", end ) << "ms\n";
 				auto totalProcessTime = end-start;
@@ -276,7 +289,6 @@ bool CPSTracker::runOnModule(Module &M) {
 				Value *processStr = builder.CreateGlobalStringPtr(process, "str");
 				std::vector<Value *> processTime({processStr});
                                 builder.CreateCall(printfFunc, processTime, "calltmp");
-
 			}
 		}
 	}
@@ -286,7 +298,7 @@ bool CPSTracker::runOnModule(Module &M) {
 }
 
 
-static void registerAFLPass(const PassManagerBuilder &,
+static void registerCPSPass(const PassManagerBuilder &,
                             legacy::PassManagerBase &PM) {
 
   PM.add(new CPSTracker());
@@ -294,14 +306,14 @@ static void registerAFLPass(const PassManagerBuilder &,
 }
 
 
-static RegisterStandardPasses RegisterAFLPass(
-    PassManagerBuilder::EP_ModuleOptimizerEarly, registerAFLPass);
+static RegisterStandardPasses RegisterCPSPass(
+    PassManagerBuilder::EP_ModuleOptimizerEarly, registerCPSPass);
 
 
 static RegisterPass<CPSTracker> X("CPSTracker", "CPSTracker Pass",
                              false /* Only looks at CFG */,
                              false /* Analysis Pass */);
 
-static RegisterStandardPasses RegisterAFLPass0(
-    PassManagerBuilder::EP_EnabledOnOptLevel0, registerAFLPass);
+static RegisterStandardPasses RegisterCPSPass0(
+    PassManagerBuilder::EP_EnabledOnOptLevel0, registerCPSPass);
 
