@@ -18,6 +18,8 @@
 #include "llvm/Transforms/IPO/PassManagerBuilder.h"
 #include "llvm/Support/raw_ostream.h"
 #include "llvm/IR/DebugInfoMetadata.h"
+//#include "basic_log.h"
+//#include "hello.h"
 #include "llvm/ExecutionEngine/ExecutionEngine.h"
 #include "llvm/IR/Type.h"
 #include "llvm/IR/DerivedTypes.h"
@@ -38,11 +40,93 @@ namespace {
 
       bool runOnModule(Module &M) override;
 
+      // StringRef getPassName() const override {
+      //  return "American Fuzzy Lop Instrumentation";
+      // }
+
   };
 
 }
 
 char CPSTracker::ID = 0;
+
+
+/*
+std::unordered_set<BasicBlock*> visited_bbs;
+
+void visitBB(BasicBlock &BB, Value* condition){
+        //auto *bbss = BB.getSingleSuccessor();
+        //errs()<<"got successor: "<<bbss<<"\n";
+        //
+        if (visited_bbs.find(&BB) != visited_bbs.end()) {
+                errs() << "already visited\n";
+                return;
+        }
+
+        visited_bbs.insert(&BB);
+        LLVMContext &context = BB.getContext();
+        Type *intType = Type::getInt32Ty(context);
+        std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
+        FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
+        auto *M = BB.getModule();
+        auto printfFunc = M->getOrInsertFunction("printf", printfType);
+
+        for(auto &&I:BB){
+                errs()<<I<<"\n";
+
+                if(auto *BI = dyn_cast<BranchInst>(&I)){
+                        if (BI->isConditional()) {
+                                errs()<< "^ is conditional\n";
+                                visitBB(*BI->getSuccessor(0),NULL);
+                                visitBB(*BI->getSuccessor(1),NULL);
+                        } else{
+                                visitBB(*BI->getSuccessor(0),NULL);
+                                errs()<< "^ is unconditional\n";
+                        }
+                } else if(auto *CI = dyn_cast<CallInst>(&I)){
+
+                        if (CI->getCalledFunction()->getName().startswith("llvm.dbg")) {
+                                errs() << "skipping llvm internal function\n";
+                                continue;
+                        }
+
+                        std::vector<Value*> arg_values;
+
+                        for(auto i = CI->arg_begin();i!=CI->arg_end();++i){
+                                arg_values.push_back(*i);
+                        }
+
+                        // BasicBlock::iterator IP = BB.getFirstInsertionPt();
+                        IRBuilder<> builder(&(*CI));
+
+                        // The format string for the printf function, declared as a global literal
+                        std::string format("\narguments to %s: \n");
+                        for (auto &&arg : arg_values) {
+                                format += " * %lu\n";
+				//errs()<<format<<"\n";
+                        }
+                        Value *str = builder.CreateGlobalStringPtr(format, "");
+
+                        std::vector<Value *> argsV({str});
+
+                        // print the function name
+                        std::string s;
+                        raw_string_ostream rso(s);
+                        rso << CI->getCalledFunction()->getName() << " ";
+                        argsV.push_back(builder.CreateGlobalStringPtr(rso.str(), ""));
+
+                        // print the argument values
+                        for (auto &v : arg_values) {
+                                argsV.push_back(v);
+                        }
+
+                        builder.CreateCall(printfFunc, argsV, "calltmp");
+                }
+        }
+}
+*/
+
+
 
 bool CPSTracker::runOnModule(Module &M) {
 	
@@ -53,6 +137,9 @@ bool CPSTracker::runOnModule(Module &M) {
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
 
+	//Function* msg = M.getFunction("_ZN8callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE");
+	//Function* msg = M.getFunction("_ZN8callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE");
+	//errs()<<*msg<<"\n";
 	for (auto &F:M){
 		std::vector<std::string> arg_strings;
 		std::vector<Value*> arg_values;
@@ -61,6 +148,9 @@ bool CPSTracker::runOnModule(Module &M) {
 		rso << F.getName() << " ";
 		arg_strings.push_back(rso.str());
 		for(auto i = F.arg_begin();i!=F.arg_end();++i){
+			//errs()<<"\narg_strings: "<<*i<< ", name = " << i->getName() <<"\n";
+			//std::string s;
+			//raw_string_ostream rso(s);
 			rso << *i <<"\n";
 			arg_strings.push_back(rso.str());
 			arg_values.push_back(i);
@@ -69,14 +159,23 @@ bool CPSTracker::runOnModule(Module &M) {
 		
 	//Done
 		//if(F.getName().contains("subtract")){
+		//if(F.getName().contains("llvm.dbg"))
+		//	continue;
+		//if(F.getName().contains("message_arrived") || F.getName().contains("publish")){
+		//errs()<<"Functions: "<<F.getName()<<"\n";
+		//if(F.getName().contains("publish")){
+		//	errs()<<"publish function found: "<<F.getName()<<"\n";
+		//}
 		//if(F.getName() == "_ZN2ft23action_listener_publishC1Ev"){
 		//This condition is for testbed code & got all functions needed for VGR graph.
 		
 		//All Publish - worked fine
 		//if(F.getName() == "_ZN2ft23action_listener_publishC1Ev" || F.getName()=="_ZN2ft20TxtMqttFactoryClient23publishStationBroadcastENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEdS6_S6_S6_l" || F.getName()=="_ZN4mqtt12async_client7publishESt10shared_ptrIKNS_7messageEEPvRNS_16iaction_listenerE" || F.getName()=="_ZN2ft20TxtMqttFactoryClient15publishStateHBWENS_13TxtLEDSCode_tENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEliS7_"  ||F.getName()== "_ZN2ft20TxtMqttFactoryClient19publishStateStationENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEENS_13TxtLEDSCode_tES6_liS6_" ||F.getName()=="_ZN2ft20TxtMqttFactoryClient15publishStateDSIENS_13TxtLEDSCode_tENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEliS7_" || F.getName()=="_ZN2ft20TxtMqttFactoryClient15publishStateMPOENS_13TxtLEDSCode_tENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEliS7_" || F.getName()=="_ZN2ft20TxtMqttFactoryClient15publishStateSLDENS_13TxtLEDSCode_tENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEliS7_" || F.getName()=="_ZN2ft20TxtMqttFactoryClient15publishStateVGRENS_13TxtLEDSCode_tENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEliS7_" || F.getName()=="_ZN2ft20TxtMqttFactoryClient15publishStateDSOENS_13TxtLEDSCode_tENSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEEliS7_" || F.getName()=="_ZN2ft20TxtMqttFactoryClient17publishStateOrderENS_13TxtOrderStateEl" || F.getName()=="_ZN2ft20TxtMqttFactoryClient12publishNfcDSENS_12TxtWorkpieceESt3mapINS_16TxtHistoryCode_tExSt4lessIS3_ESaISt4pairIKS3_xEEEl" || F.getName()=="_ZN2ft20TxtMqttFactoryClient13publishVGR_DoENS_14TxtVgrDoCode_tEPNS_12TxtWorkpieceEl"){
+		//if(F.getName().contains("publish")){
+			//errs()<<F.getName()<<"\n";
 		
-		//if(F.getName() == "_ZTv0_n12_N2ft23action_listener_publishD1Ev"){
-		if(F.getName().contains("message_arrived") || F.getName()== "_ZN2ft23action_listener_publishC1Ev" ||F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
+		if(F.getName() == "_ZTv0_n12_N2ft23action_listener_publishD1Ev"){
+		//if(F.getName().contains("message_arrived") || F.getName()== "_ZN2ft23action_listener_publishC1Ev" ||F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 		
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget")){
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
