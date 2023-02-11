@@ -104,10 +104,10 @@ bool AFLCoverage::runOnModule(Module &M) {
 		                                // The format string for the printf function, declared as a global literal
 		                                //std::string format("\narguments to %s: \n");
 		                                std::string format("\nFunction called: %s\n");
-		                                //for (auto &&arg : arg_values) {
-		                                //        format += " * %lu\n";
-		                                //	//format += " %s = (0x%lx)\n";
-		                                //}
+		                                for (auto &&arg : arg_values) {
+		                                        format += " * %d\n";
+		                                	//format += " %s = (0x%lx)\n";
+		                                }
 		                                Value *str = builder.CreateGlobalStringPtr(format, "");
 		        
 		                                std::vector<Value *> argsV({str});
@@ -119,9 +119,17 @@ bool AFLCoverage::runOnModule(Module &M) {
 		                                argsV.push_back(builder.CreateGlobalStringPtr(rso.str(), ""));
 		        
 		                                // print the argument values
-		                                //for (auto &v : arg_values) {
-		                                //        argsV.push_back(v);
-		                                //}
+		                                for (auto &v : arg_values) {
+		                                        argsV.push_back(v);
+						// Getting 137 error while bitcasting for 32 bit
+						//	argsV.push_back(builder.CreateGlobalStringPtr(v->getName(), ""));
+       						//	const DataLayout &DL = M.getDataLayout();
+       						//	unsigned SourceBitWidth = DL.getTypeSizeInBits(v->getType());
+       						//	IntegerType *IntTy = builder.getIntNTy(SourceBitWidth);
+       						//	Value *IntResult = builder.CreateBitCast(v, IntTy);
+       						//	Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
+       						//	argsV.push_back(Int32Result);
+		                                }
 
 		                                builder.CreateCall(printfFunc, argsV, "calltmp");
                                 }

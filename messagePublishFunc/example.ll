@@ -45,16 +45,34 @@ define dso_local noundef i32 @_Z3addii(i32 noundef %0, i32 noundef %1) #4 {
   ret i32 %7
 }
 
-; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define dso_local noundef i32 @_Z8subtractii(i32 noundef %0, i32 noundef %1) #4 {
+; Function Attrs: mustprogress noinline optnone uwtable
+define dso_local noundef i32 @_Z8subtractii(i32 noundef %0, i32 noundef %1) #5 {
   %3 = alloca i32, align 4
   %4 = alloca i32, align 4
-  store i32 %0, i32* %3, align 4
-  store i32 %1, i32* %4, align 4
-  %5 = load i32, i32* %3, align 4
+  %5 = alloca i32, align 4
+  store i32 %0, i32* %4, align 4
+  store i32 %1, i32* %5, align 4
   %6 = load i32, i32* %4, align 4
-  %7 = sub nsw i32 %5, %6
-  ret i32 %7
+  %7 = icmp eq i32 %6, 1
+  br i1 %7, label %8, label %9
+
+8:                                                ; preds = %2
+  store i32 0, i32* %3, align 4
+  br label %16
+
+9:                                                ; preds = %2
+  %10 = load i32, i32* %4, align 4
+  %11 = load i32, i32* %4, align 4
+  %12 = sub nsw i32 %11, 1
+  %13 = load i32, i32* %5, align 4
+  %14 = call noundef i32 @_Z8subtractii(i32 noundef %12, i32 noundef %13)
+  %15 = mul nsw i32 %10, %14
+  store i32 %15, i32* %3, align 4
+  br label %16
+
+16:                                               ; preds = %9, %8
+  %17 = load i32, i32* %3, align 4
+  ret i32 %17
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
@@ -71,7 +89,7 @@ define dso_local noundef i32 @_Z8subtractiNSt7__cxx1112basic_stringIcSt11char_tr
 }
 
 ; Function Attrs: mustprogress noinline norecurse optnone uwtable
-define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #5 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
+define dso_local noundef i32 @main(i32 noundef %0, i8** noundef %1) #6 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
   %3 = alloca i32, align 4
   %4 = alloca i32, align 4
   %5 = alloca i8**, align 8
@@ -159,7 +177,8 @@ attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protect
 attributes #2 = { nounwind "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #3 = { nounwind }
 attributes #4 = { mustprogress noinline nounwind optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
-attributes #5 = { mustprogress noinline norecurse optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #5 = { mustprogress noinline optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
+attributes #6 = { mustprogress noinline norecurse optnone uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 
 !llvm.module.flags = !{!0, !1, !2, !3, !4}
 !llvm.ident = !{!5}

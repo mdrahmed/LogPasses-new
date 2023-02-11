@@ -6,7 +6,10 @@ int add(int a,int b){
 	return a+b;
 }
 int subtract(int a, int b){
-	return a-b;
+	if(a==1)
+		return 0;
+
+	return a*subtract((a-1),b);
 }
 int subtract(int a, string s, unsigned long ul, double d){
 	return a-10;

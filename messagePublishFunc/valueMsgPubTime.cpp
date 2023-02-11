@@ -68,8 +68,7 @@ bool CPSTracker::runOnModule(Module &M) {
 	
 		
 	//Done
-		//if(F.getName().contains("subtract")){
-		//if(F.getName() == "_ZN2ft23action_listener_publishC1Ev"){
+		//if(F.getName().contains("subtract") && !F.getName().contains("printf")){
 		//This condition is for testbed code & got all functions needed for VGR graph.
 		
 		//All Publish - worked fine
@@ -78,13 +77,23 @@ bool CPSTracker::runOnModule(Module &M) {
 		//if(F.getName() == "_ZTv0_n12_N2ft23action_listener_publishD1Ev"){
 		//if(F.getName().contains("message_arrived") || F.getName()== "_ZN2ft23action_listener_publishC1Ev" ||F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 		
-		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget")){
-		if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
+		//if(F.getName().contains("requestVGRfetchContainer") && F.getName() != "printf"){
+		//if(F.getName().contains("publish")){
+		if( (F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") )){
+			// The run is calling the runtime error function
 			if(F.getName().contains("publish"))
 				errs()<<F.getName()<<"\n";	
+			//if(F.getName() == "printf"){
+			//	errs()<<"print found: "<<F.getName()<<"\n";
+			//	continue; //Worked with break
+			//}
+			if(F.getName().startswith("llvm.dbg")){ // need to check this llvm.dbg function seperately
+				errs()<<"Skipping llvm internal function\n";
+				continue;
+			}
 			//This for loop will get the user function		
 			for(auto ui=F.use_begin();ui!=F.use_end();ui++){
-				errs()<<"-----------inside use_begin()---------\n";
+				//errs()<<"-----------inside use_begin()---------\n";
 				if(auto I = dyn_cast<Instruction>(ui->getUser())){
 					auto *BB = I->getParent();
 					Function* userFunction = BB->getParent();
@@ -95,6 +104,7 @@ bool CPSTracker::runOnModule(Module &M) {
 					std::string s;
 					raw_string_ostream rso(s);
 					rso << userFunction->getName()<<" is calling "<<F.getName()<<"\n";
+
 					rso << F.getName() << " is called from this callInst"<<*ui->getUser()<<"\n";
 					user.push_back(rso.str());
 
@@ -109,11 +119,10 @@ bool CPSTracker::runOnModule(Module &M) {
 					}
 					builder.CreateCall(printfFunc, argsV, "calltmp");				
 				}
-				errs()<<"------outside use_begin()-------\n";
 			}
 			
 			if(!F.isDeclaration()){
-				errs()<<"------inside isDeclaration()-------\n";
+				//errs()<<"------inside isDeclaration()-------\n";
 				auto &BB = F.getEntryBlock();        
 				// starting arguments		
 				std::vector<std::string> arguments;
@@ -123,7 +132,7 @@ bool CPSTracker::runOnModule(Module &M) {
 				// Injecting World time
                        		std::time_t now = std::time(0);
                        		char* dt = ctime(&now);
-                       		errs()<<"dt: "<<dt<<"Unix time: "<<now<<"\n";
+                       		//errs()<<"dt: "<<dt<<"Unix time: "<<now<<"\n";
 			
 				// date and time
 				Value *str = builder.CreateGlobalStringPtr(dt, "str");
@@ -141,10 +150,10 @@ bool CPSTracker::runOnModule(Module &M) {
 
 				//Process start time is printed here
                         	auto start = TimeRecord::getCurrentTime(false).getProcessTime();
-                        	errs()<<"Process start time:"<< llvm::format("%0.1f", start) << "ms\n";
+                        	//errs()<<"Process start time:"<< llvm::format("%0.1f", start) << "ms\n";
 
 				{
-					errs()<<"------inside arguments-------\n";
+					//errs()<<"------inside arguments-------\n";
 					//// The format string for the printf function, declared as a global literal
 					std::string format("\narguments: ");
 					std::string s;
@@ -164,19 +173,17 @@ bool CPSTracker::runOnModule(Module &M) {
 						argsV.push_back(builder.CreateGlobalStringPtr(s, ""));
 					}
 					builder.CreateCall(printfFunc, argsV, "calltmp");
-					errs()<<"------outside arguments-------\n";				
 				}
 				// till now arguments
 				// Starting to record values		
 				{
-				// using the format specifier for printing the values
-					errs()<<"------inside arg_values-------\n";
+					// using the format specifier for printing the values
 					std::string format("arg_values: ");
 					for (size_t i = 0; i < arg_values.size(); ++i) {
 						//format += " %s = %lu\n";
 						format += " %s = %d\n";
 					}
-				// creating the string from format, then converting it into vector
+					// creating the string from format, then converting it into vector
 					//StringRef ft = str(format);
 					//Value *str = builder.CreateGlobalStringPtr(StringRef(format), "");
 					Value *str = builder.CreateGlobalStringPtr(format, "");
@@ -187,19 +194,21 @@ bool CPSTracker::runOnModule(Module &M) {
 					        unsigned SourceBitWidth = DL.getTypeSizeInBits(v->getType());
 					        //unsigned SourceBitWidth = cast<IntegerType>(v->getType())->getBitWidth();;
 					        IntegerType *IntTy = builder.getIntNTy(SourceBitWidth);
-					        Value *IntResult = builder.CreateBitCast(v, IntTy);
-					        Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
+					        //Value *IntResult = builder.CreateBitCast(v, IntTy);
+						Instruction::BitCast opcode = CastInst::getCastOpcode(v, false, IntTy, false);
+						Value *IntResult = builder.CreateCast(opcode, v, IntTy);
+						Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
 					        argsV.push_back(Int32Result);
+						//argsV.push_back(v);
 					}
 					builder.CreateCall(printfFunc, argsV, "calltmp");
-				        errs()<<"------outside arg_values-------\n";	
 				}
 
 				//Process end time is printed here
 				auto end = TimeRecord::getCurrentTime(false).getProcessTime();
-                                errs()<<"Process end time:"<< llvm::format("%0.1f", end ) << "ms\n";
+                                //errs()<<"Process end time:"<< llvm::format("%0.1f", end ) << "ms\n";
 				auto totalProcessTime = end-start;
-				errs()<<"Total process time: "<<llvm::format("%0.1f", totalProcessTime)<<"ms\n";
+				//errs()<<"Total process time: "<<llvm::format("%0.1f", totalProcessTime)<<"ms\n";
 				
 				std::string process("Total Process time:");
 				process += std::to_string(totalProcessTime) +"\n";
