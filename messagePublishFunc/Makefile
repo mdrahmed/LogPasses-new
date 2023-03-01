@@ -1,3 +1,8 @@
+## exports to run on shell to compile it without Makefile
+# export CXXFLAGS="-O3 -funroll-loops -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign -DVERSION=1  -Wno-variadic-macros"
+# export CLANG_CFL="`llvm-config-14 --cxxflags` -Wl,-znodelete -fno-rtti -fpic $CXXFLAGS"
+# export CLANG_LFL=`llvm-config-14 --ldflags --libs`
+
 CXXFLAGS=-O3 -funroll-loops -Wall -D_FORTIFY_SOURCE=2 -g -Wno-pointer-sign -DVERSION=1  -Wno-variadic-macros
 CLANG_CFL=$(shell llvm-config-14 --cxxflags) -Wl,-znodelete -fno-rtti -fpic $(CXXFLAGS)
 CLANG_LFL=$(shell llvm-config-14 --ldflags --libs)
@@ -11,10 +16,14 @@ PASS=instrument.so
 #PASS_SRC=funcNArg.cpp
 #PASS_SRC=funcCalls.cpp  ## gets the values
 #PASS_SRC=messageAndPublish2.cpp
-PASS_SRC=valueMsgPubTime.cpp ## LOGGING THE FUNCTIONS, ARGUMENTS AND VALUES ## New valueMsgPub.cpp will contain bitcast but oldValueMsgPub is a copy of old one without bitcasting the values
-#PASS_SRC=PubMsgArrWorked.cpp ## Publish is working here
+#PASS_SRC=valueMsgPubTime.cpp ## LOGGING THE FUNCTIONS, ARGUMENTS AND VALUES ## New valueMsgPub.cpp will contain bitcast but oldValueMsgPub is a copy of old one without bitcasting the values
+# PASS_SRC=PubMsgArrWorked.cpp ## Publish is working here
+# PASS_SRC=IfConditionFinder.cpp #print the conditions for if and switch case
+# PASS_SRC=varAssignPass.cpp  ## This adds a printf inside the cpp code, which prints the store and alloc inst
+PASS_SRC=longPass.cpp
 LL=example.ll
-CPP_file=example.cpp
+#CPP_file=example.cpp
+CPP_file=functionCallingEx.cpp
 Objects=ex instrument.so *.ll
 
 all: $(LL) $(PASS) ex 

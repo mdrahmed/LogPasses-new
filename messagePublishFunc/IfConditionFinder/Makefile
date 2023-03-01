@@ -6,10 +6,10 @@ CLANG_LFL=$(shell llvm-config-14 --ldflags --libs)
 CLANG=clang++-14
 PASS=instrument.so
 #PASS_SRC=fsmTransitionPass.cpp
-PASS_SRC=IfConditionFinder.cpp
+PASS_SRC=IfConditionFinder.cpp #print the conditions for if and switch case
 LL=fsm.ll
-CPP_file=fsmExample.cpp
-#CPP_file=simple.cpp
+#CPP_file=fsmExample.cpp
+CPP_file=fsmWithSwitch.cpp
 Objects=ex instrument.so *.ll
 
 all: $(LL) $(PASS) ex 
@@ -21,7 +21,7 @@ $(PASS): $(PASS_SRC)
 	$(CLANG) $(CLANG_CFL) -g -shared $< -o $@
 
 ex: $(CPP_file)  
-	$(CLANG) -O0 -o $@ -fno-discard-value-names -flegacy-pass-manager -g -Xclang -load -Xclang ./instrument.so $<
+	$(CLANG) -o $@ -fno-discard-value-names -flegacy-pass-manager -g -Xclang -load -Xclang ./instrument.so $<
 
 .PHONY: clean
 clean:

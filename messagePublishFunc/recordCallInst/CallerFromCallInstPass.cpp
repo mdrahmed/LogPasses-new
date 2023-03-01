@@ -53,43 +53,17 @@ bool CPSTracker::runOnModule(Module &M) {
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
 
-
-	std::vector<StringRef> functions;	
-	std::vector<StringRef> alp_funcs;
-
-	int i,alp;
-	i = 0;
-	alp = 0;
-
 	for (auto &F:M){
-		errs() << "Function: " << F.getName() << "\n";
-	        for (BasicBlock &BB : F) {
-	          for (Instruction &I : BB) {
-			  if (ICmpInst *CI = dyn_cast<ICmpInst>(&I)) {
-                            // Get the operands of the icmp instruction
-                            Value *Op1 = CI->getOperand(0);
-                            Value *Op2 = CI->getOperand(1);
-			    errs()<<"Op1:"<<*Op1<<"\nOp2:"<<*Op2<<"\n";
-
-                            // Get the names of the operands
-                            //StringRef Op1Name = Op1->getName();
-                            //StringRef Op2Name = Op2->getName();
-
-			    StringRef Op1Name = Op1->hasName() ? Op1->getName() : "unnamed";
-      			    StringRef Op2Name = Op2->hasName() ? Op2->getName() : "unnamed";
-                            // Print the name of the operands and the condition
-                            errs() << "If Condition:\n\top1name: " << Op1Name << "\n\tcondition:" << CI->getPredicateName(CI->getPredicate())
-                                   << "\n\top2name:" << Op2Name << "\n";
-                          }
-			  //if (BranchInst *BI = dyn_cast<BranchInst>(&I)) {
-		      	  //      if (BI->isConditional()) {
-			  //      	errs()<<"Inside Branch Conditional\n";
-	              	  //      	Value *condition = BI->getCondition();
-	              	  //      	errs() << "  If Condition: " << *condition << "\n";
-	              	  //      }
-	            	  //}
-	          }
-	        }
+		for (BasicBlock &BB : F) {
+			for(Instruction &I: BB){
+				if(auto *callInst = dyn_cast<CallInst>(&I)) {
+					Function *calledFunction = callInst->getCalledFunction();
+					if(calledFunction){
+						errs()<<"Function:"<<calledFunction->getName()<<" called by "<<F.getName()<<"\n";
+					}
+				}
+			}
+		}
 	}
         return true;
 }

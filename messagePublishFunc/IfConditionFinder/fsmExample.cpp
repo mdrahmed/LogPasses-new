@@ -30,7 +30,7 @@ int main()
 	    //FSM_TRANSITION(currentState);	
 	    fsm_transition(currentState, currentState + 1);
 	    std::cout << "Current state is: " << currentState << std::endl;	
-	    if(currentState>0){
+	    if(currentState){
 		std::cout <<"Checking inside if condition\n";
 	    }
 	    

@@ -70,7 +70,7 @@ bool CPSTracker::runOnModule(Module &M) {
 		}
 	
 		// Added HBW functions	
-		if(F.getName().contains("FSM_TRANSITION") || F.getName().contains("make_message") || F.getName().contains("subTopic") || F.getName().contains("fetch") || F.getName().contains("store") || F.getName().contains("Notify") || F.getName().contains("Update") ||  F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestVGRfetchContainer") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
+		if(F.getName().contains("make_message") || F.getName().contains("subTopic") || F.getName().contains("fetch") || F.getName().contains("store") || F.getName().contains("Notify") || F.getName().contains("Update") ||  F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestVGRfetchContainer") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 		// I am instrumenting only these certain functions
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 			if(F.getName() == "printf" || F.getName().startswith("llvm.dbg"))
@@ -88,8 +88,8 @@ bool CPSTracker::runOnModule(Module &M) {
 					raw_string_ostream rso(s);
 					rso << userFunction->getName()<<" is calling "<<F.getName()<<"\n";
 					rso << F.getName() << " is called from this callInst"<<*ui->getUser()<<"\n";
-					if(F.getName().contains("Notify") || F.getName().contains("Update"))
-						errs()<<"Caller of Notify and update is instrumented\n";
+					if(F.getName().contains("make_message")) 
+						outs()<<"Caller of make_message is"<<userFunction->getName() <<"\n";
 					user.push_back(rso.str());
 
 					for (size_t i = 0; i < user.size(); ++i) {

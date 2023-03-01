@@ -68,7 +68,7 @@ bool CPSTracker::runOnModule(Module &M) {
 	            if (BranchInst *BI = dyn_cast<BranchInst>(&I)) {
 	              if (BI->isConditional()) {
 	                Value *condition = BI->getCondition();
-	                errs() << "  If Condition: " << *condition << "\n";
+	                outs() << "  If Condition: " << *condition << "\n";
 	              }
 	            }
 	          }
