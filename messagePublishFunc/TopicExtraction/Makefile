@@ -5,11 +5,7 @@ CLANG_LFL=$(shell llvm-config-14 --ldflags --libs)
 
 CLANG=clang++-14
 PASS=instrument.so
-#PASS_SRC=shortPass.cpp
-#PASS_SRC=longPass.cpp 
-#PASS_SRC=IfConditionFinder.cpp
-#PASS_SRC=newLongPass.cpp
-PASS_SRC=stringExtractPass.cpp
+PASS_SRC=stringExtractPass.cpp ## This pass will extract string
 LL=example.ll
 MODIFIED=modified.ll
 CPP_file=example.cpp
