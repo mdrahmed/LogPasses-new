@@ -1,5 +1,5 @@
-// This is the pass which is extract string from a pointer not from a shared pointer
-
+// This is the pass which is extract ..
+ 
 #include <unordered_set>
 #include <unordered_map>
 #include <sstream>
@@ -45,6 +45,17 @@ namespace {
 }
 
 char CPSTracker::ID = 0;
+/*
+void extract_shared_ptr(Function* F, IRBuilder<>& builder, Value* arg, std::vector<Value*>& argsV) {
+  // Assume arg is a std::shared_ptr<Value>* argument.
+  Type* shared_ptr_ty = arg->getType();
+  Type* value_ty = shared_ptr_ty->getPointerElementType();
+  Value* shared_ptr = builder.CreateLoad(shared_ptr_ty, arg);
+  Value* ptr = builder.CreateCall(shared_ptr->getType()->getPointerElementType(), shared_ptr, {builder.getInt32(0)});
+  Value* loaded_value = builder.CreateLoad(value_ty, ptr);
+  argsV.push_back(loaded_value);
+}
+*/
 
 bool CPSTracker::runOnModule(Module &M) {
 	
@@ -70,8 +81,9 @@ bool CPSTracker::runOnModule(Module &M) {
 		}
 	
 		// Added HBW functions	
-		//if(F.getName().contains("subtract")){
-		if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("disconnect") || F.getName().contains("connection_lost") || F.getName().contains("delivery_complete")){
+		if(F.getName().contains("subtract") || F.getName().contains("str")){
+		//if(F.getName().contains("FSM_TRANSITION") || F.getName().contains("make_message") || F.getName().contains("subTopic") || F.getName().contains("fetch") || F.getName().contains("store") || F.getName().contains("Notify") || F.getName().contains("Update") ||  F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestVGRfetchContainer") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
+		// I am instrumenting only these certain functions
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
 			//This for loop will get the user function i.e., suppose I got a function "message_arrived", then following iterator will tell me the function calling this function.		
 			
@@ -176,116 +188,41 @@ bool CPSTracker::runOnModule(Module &M) {
 					
 					// Worked with 32 bit int and then all values except pointer and array worked
 					
-					outs()<<"\nFunction name:"<<F.getName()<<"\n";
-
 					for (auto &v : arg_values) {
 						if(v->getType()->isPointerTy()){
-							//String is loaded here
-							//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-							//String is pushed to asgsV
-							//argsV.push_back(loadedValue);
-							
-							// trying to extract topic from here
-							//v->dump();
-							//llvm::Value* sharedPtrValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-							//llvm::Value* ptrValue = builder.CreateExtractValue(sharedPtrValue, {0});
-							//llvm::Value* loadedValue = builder.CreateLoad(ptrValue,"");
-							//argsV.push_back(loadedValue);
-							//argsV.push_back(builder.CreateGlobalStringPtr("pointer"));
-							
-							outs()<<"Pointer type:"<< *v->getType() <<"\n";
-							outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
-
-							std::string typeName;
-							raw_string_ostream rso(typeName);
-							v->print(rso);
-							rso.flush();
-							outs()<<"Type: "<<typeName <<"\n";
-
-							// not able to find shared pointer
-							/*
-							llvm::Type *elementType = v->getType()->getPointerElementType();
-							if (auto *ptrType = llvm::dyn_cast<llvm::PointerType>(elementType)) {
-							    llvm::Type *pointedType = ptrType->getPointerElementType();
-							    outs()<<"It's a pointer.\n";
-							    if (pointedType->isIntegerTy(8)) {
-							        llvm::Type *sharedPtrType = llvm::Type::getInt8PtrTy(context); // modify for actual shared pointer type
-								outs()<<"Got the original shared pointer type.\n";
-							        if (ptrType == sharedPtrType) {
-							            // Pointer to a shared pointer of a string
-							            llvm::Value *sharedPtrValue = builder.CreateLoad(elementType, v);
-							            llvm::Value *loadedValue = builder.CreateLoad(sharedPtrValue->getType()->getPointerElementType(), sharedPtrValue);
-							            argsV.push_back(loadedValue);
-								    outs()<<"It's a shared pointer.\n";
-							        }
-							    }
+							Type* pointee_ty = v->getType()->getPointerElementType();
+							outs()<<"pointee_ty:"<<*pointee_ty<<"\n";
+							//if (pointee_ty->isStructTy() && pointee_ty->getStructName().startswith("class.std::shared_ptr.")) {
+      							//  //extract_shared_ptr(F, builder, arg, argsV);
+							//  	outs()<<"Pointer type:"<<pointee_ty->getStructName();
+							//	Type* shared_ptr_ty = v->getType();
+							//	Type* value_ty = shared_ptr_ty->getPointerElementType();
+							//	Value* shared_ptr = builder.CreateLoad(shared_ptr_ty, v);
+							//	Value* ptr = builder.CreateCall(shared_ptr->getType()->getPointerElementType(), shared_ptr, {builder.getInt32(0)});
+							//	Value* loaded_value = builder.CreateLoad(value_ty, ptr);
+							//	argsV.push_back(loaded_value);
+      							//} 
+							//if (v->getType()->getPointerElementType()->isPointerTy() && v->getType()->getPointerElementType()->getPointerElementType()->isFunctionTy()) {
+							outs()<<"";
+        						if(pointee_ty->isStructTy() && pointee_ty->getStructName().startswith("class.std::shared_ptr.")){ 
+						     		// if the pointer is a shared_ptr to a function type
+							    outs()<<"It's a shared pointer.\n";
+        						    llvm::Value *loadedValue = builder.CreateLoad(builder.getInt8PtrTy(), builder.CreateExtractValue(v, {0}));
+        						    argsV.push_back(loadedValue);
+        						    argsV.push_back(builder.CreateGlobalStringPtr("shared_ptr"));
+        						    continue;
+        						}
+							else {
+							      // Extracting string here
+							      llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+							      argsV.push_back(loadedValue);
+							      //argsV.push_back(builder.CreateGlobalStringPtr("pointer"));
 							}
-							*/
 							continue;
-					        }
+
+                                                }
 						argsV.push_back(v);
 					}
-					
-					//for (auto &v : arg_values) {
-					//        //argsV.push_back(builder.CreateGlobalStringPtr(v->getName(), ""));
-					//        const DataLayout &DL = M.getDataLayout();
-					//        unsigned SourceBitWidth = DL.getTypeSizeInBits(v->getType());
-					//        //unsigned SourceBitWidth = cast<IntegerType>(v->getType())->getBitWidth();;
-					//        IntegerType *IntTy = builder.getIntNTy(SourceBitWidth);
-					//        //Value *IntResult = builder.CreateBitCast(v, IntTy);
-
-					//	std::string value_str;
-    					//	llvm::raw_string_ostream rso(value_str);
-    					//	v->print(rso);
-
-    					//	// Create global string pointer that points to the string value
-    					//	auto value_ptr = builder.CreateGlobalStringPtr(value_str, "value_str");
-
-					//	//std:: string topic;
-					//	//raw_string_ostream t(topic);
-					//	//Value *tval = v;
-					//	//tval<<*v;
-					//	//argsV.push_back(builder.CreateGlobalStringPtr(tval->str(), ""));
-
-					//	//StringRef str = argsV[0]->getName();
-					//	//argsV.push_back(builder.CreateGlobalStringPtr(str.data(), ""));
-					//	
-					//	//Value *IntResult;
-					//	//if(F.getName().contains("subtract")){
-					//	//	//char char_array[256];
-					//	//	StringRef str = argsV[0]->getName();
-    					//	//	//printf("msg: %.*s\n", (int) str.size(), str.data());
-					//	//	printf("msg: %s\n", str.data());
-
-					//	//	Value *val = argsV[0];
-					//	//	outs()<<*val<<"\n";
-					//	//	
-					//	//	val->print(rso);
-					//	//	printf("As string: %s\n", rso.str().c_str());
-
-					//	//}
-					//	//if(v->getType()->isArrayTy()){
-					//	//	continue;
-					//	////	auto *ArrayTy = dyn_cast<ArrayType>(v->getType());
-       					//	////	auto NumElements = ArrayTy->getNumElements();
-       					//	////	auto *NewArrayType = ArrayType::get(ArrayTy->getElementType(), NumElements);
-       					//	////	auto *NewIntArrayType = ArrayType::get(builder.getIntNTy(SourceBitWidth), NumElements);
-       					//	////	auto *NewArray = builder.CreateBitCast(v, NewArrayType);
-       					//	////	IntResult = builder.CreateBitCast(NewArray, NewIntArrayType);
-					//	//}
-					//	//if(v->getType()->isPointerTy()){
-					//	//	IntResult = builder.CreatePtrToInt(v, IntTy);
-					//	//}	
-					//	//else{
-					//	//	IntResult = builder.CreateBitCast(v, IntTy);
-					//	//}
-					//        //Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
-					//        ////llvm_unreachable("Invalid type for cast");
-					//	//argsV.push_back(Int32Result);
-					//	////Value *ty = Int32Result->getType(); //problem is here
-					//	////argsV.push_back(ty);
-					//	//}
-					//}
 					builder.CreateCall(printfFunc, argsV, "calltmp"); 
 				}
 

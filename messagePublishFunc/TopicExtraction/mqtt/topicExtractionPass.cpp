@@ -1,4 +1,4 @@
-// This is the pass which is extract string from a pointer not from a shared pointer
+// Trying to extract topic with this pass 
 
 #include <unordered_set>
 #include <unordered_map>
@@ -180,47 +180,27 @@ bool CPSTracker::runOnModule(Module &M) {
 
 					for (auto &v : arg_values) {
 						if(v->getType()->isPointerTy()){
-							//String is loaded here
 							//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-							//String is pushed to asgsV
 							//argsV.push_back(loadedValue);
-							
-							// trying to extract topic from here
-							//v->dump();
-							//llvm::Value* sharedPtrValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-							//llvm::Value* ptrValue = builder.CreateExtractValue(sharedPtrValue, {0});
-							//llvm::Value* loadedValue = builder.CreateLoad(ptrValue,"");
-							//argsV.push_back(loadedValue);
-							//argsV.push_back(builder.CreateGlobalStringPtr("pointer"));
 							
 							outs()<<"Pointer type:"<< *v->getType() <<"\n";
+							auto containedType = v->getType()->getContainedType(0);
 							outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
-
-							std::string typeName;
-							raw_string_ostream rso(typeName);
-							v->print(rso);
-							rso.flush();
-							outs()<<"Type: "<<typeName <<"\n";
-
-							// not able to find shared pointer
-							/*
-							llvm::Type *elementType = v->getType()->getPointerElementType();
-							if (auto *ptrType = llvm::dyn_cast<llvm::PointerType>(elementType)) {
-							    llvm::Type *pointedType = ptrType->getPointerElementType();
-							    outs()<<"It's a pointer.\n";
-							    if (pointedType->isIntegerTy(8)) {
-							        llvm::Type *sharedPtrType = llvm::Type::getInt8PtrTy(context); // modify for actual shared pointer type
-								outs()<<"Got the original shared pointer type.\n";
-							        if (ptrType == sharedPtrType) {
-							            // Pointer to a shared pointer of a string
-							            llvm::Value *sharedPtrValue = builder.CreateLoad(elementType, v);
-							            llvm::Value *loadedValue = builder.CreateLoad(sharedPtrValue->getType()->getPointerElementType(), sharedPtrValue);
-							            argsV.push_back(loadedValue);
-								    outs()<<"It's a shared pointer.\n";
-							        }
-							    }
+							// Contained type will return shared pointer and the contained contained type is a structure
+							outs()<<"Contained contained type: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
+							outs()<<"Struct name: "<<containedType->getStructName()<<"\n";
+							if (containedType->getStructName().startswith("class.std::shared_ptr")) {
+								outs() << "Shared pointer type: " << *v->getType() << "\n";
+								// trying to print the pointer shared pointer is pointing to 
+								//Type *containedPointerType = containedType->getContainedType(0)->getPointerTo();
+								//outs()<< "Pointer is pointing to:" <<containedType->getContainedType(0)->getPointerTo()<<"\n";
+								Value *firstPtr = builder.CreateLoad(containedType->getContainedType(0)->getPointerElementType(), v);
+								//LoadInst *loadInst = builder.CreateLoad(containedPointerType, v);
+								argsV.push_back(firstPtr);
+								//auto sharedPtrValue = dyn_cast<llvm::ExtractValueInst>(v);
+								//auto sharedPtrObjAddr = sharedPtrValue->getOperand(0);
+								//outs() << "Object address: " << sharedPtrObjAddr << "\n";
 							}
-							*/
 							continue;
 					        }
 						argsV.push_back(v);
