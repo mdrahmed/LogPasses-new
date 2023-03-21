@@ -10,6 +10,7 @@ PASS_SRC=topicExtractionPass.cpp ## trying to extract topic using this pass
 LL=client.ll
 MODIFIED=modified.ll
 CPP_file=client_subscriber.cpp
+#CPP_file=publisher.cpp
 ifeq ($(CPP_file),client_subscriber.cpp)
 	EXE=subscriber
 else
