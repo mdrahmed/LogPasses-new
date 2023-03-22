@@ -178,52 +178,49 @@ bool CPSTracker::runOnModule(Module &M) {
 					// Worked with 32 bit int and then all values except pointer and array worked
 					
 					outs()<<"\nFunction name:"<<F.getName()<<"\n";
+					for (auto &v : arg_values) {
+						if(v->getType()->isPointerTy()){
+							//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+							//argsV.push_back(loadedValue);
+							
+							outs()<<"Pointer type:"<< *v->getType() <<"\n";
+							auto containedType = v->getType()->getContainedType(0);
+							outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
+							// If Contained type returns shared pointer then the contained contained type is a structure
+							//outs()<<"Contained contained type: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
+							//outs()<<"Struct name: "<<containedType->getStructName()<<"\n";
+							if (containedType->getStructName().startswith("class.std::shared_ptr")) {
+								outs() << "Shared pointer type: " << *v->getType() << "\n";
+								outs()<<"Struct name: "<<containedType->getContainedType(0)->getStructName()<<"\n";
+								// trying to print the pointer shared pointer is pointing to 
+								assert(containedType->getContainedType(0));
+								// Now getting the contained types and it's shared pointers like following,
+								// Contained Pointer Type:%"class.std::__shared_ptr.113" = type { %"class.mqtt::delivery_token"*, %"class.std::__shared_count" }
+								Type *containedPointerType = containedType->getContainedType(0);
+								outs()<< "Contained Pointer Type:" << *containedPointerType <<"\n";
+								assert(containedType->isStructTy());
+								outs()<<"First type: "<< *containedPointerType->getContainedType(0)<<"\n";
+								// So, the 1st type of 1st pointer is extracted, looks like -  %"class.mqtt::delivery_token"*
+								Type *firstType = containedPointerType->getContainedType(0);
+								assert(firstType->isPointerTy());
 
-for (auto &v : arg_values) {
-	if(v->getType()->isPointerTy()){
-		//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-		//argsV.push_back(loadedValue);
-		
-		outs()<<"Pointer type:"<< *v->getType() <<"\n";
-		auto containedType = v->getType()->getContainedType(0);
-		outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
-		// If Contained type returns shared pointer then the contained contained type is a structure
-		//outs()<<"Contained contained type: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
-		//outs()<<"Struct name: "<<containedType->getStructName()<<"\n";
-		if (containedType->getStructName().startswith("class.std::shared_ptr")) {
-			outs() << "Shared pointer type: " << *v->getType() << "\n";
-			outs()<<"Struct name: "<<containedType->getContainedType(0)->getStructName()<<"\n";
-			// trying to print the pointer shared pointer is pointing to 
-			assert(containedType->getContainedType(0));
-			// Now getting the contained types and it's shared pointers like following,
-			// Contained Pointer Type:%"class.std::__shared_ptr.113" = type { %"class.mqtt::delivery_token"*, %"class.std::__shared_count" }
-			Type *containedPointerType = containedType->getContainedType(0);
-			outs()<< "Contained Pointer Type:" << *containedPointerType <<"\n";
-			assert(containedType->isStructTy());
-			outs()<<"First type: "<< *containedPointerType->getContainedType(0)<<"\n";
-			Type *firstType = containedPointerType->getContainedType(0);
-			assert(firstType->isPointerTy());
-			llvm::Value *firstPtrValue = builder.CreateLoad(firstType, v);
-			outs()<<"firstPtr value: "<<*firstPtrValue<<"\n";
-			argsV.push_back(firstPtrValue);
-			//Value *firstPtr = builder.CreateLoad(containedType->getPointerElementType(), v);
-			//outs()<<"firstPtr: "<<firstPtr<<"\n";
-			//LoadInst *loadInst = builder.CreateLoad(containedPointerType->getPointerElementType(), firstPtr);
-			//argsV.push_back(loadInst);
+								// Now getting the value pointer from shared value pointer
+								Value *sharedPtrValue = builder.CreateLoad(v->getType()->getContainedType(0)->getContainedType(0), v);
+								Value *containedPtrValue = builder.CreateExtractValue(sharedPtrValue, {0});
 
-			//auto sharedPtrValue = dyn_cast<llvm::ExtractValueInst>(v);
-			//auto sharedPtrObjAddr = sharedPtrValue->getOperand(0);
-			//outs() << "Object address: " << sharedPtrObjAddr << "\n";
-		}
-		else{
-			llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-			outs()<<"loadedValue: "<<*loadedValue<<"\n";
-                	argsV.push_back(loadedValue);
-		}
-		continue;
-        }
-	argsV.push_back(v);
-}
+								llvm::Value *firstPtrValue = builder.CreateLoad(firstType, containedPtrValue);
+								outs()<<"firstPtr value: "<<*firstPtrValue<<"\n";
+								argsV.push_back(firstPtrValue);
+							}
+							else{
+								llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+								outs()<<"loadedValue: "<<*loadedValue<<"\n";
+					                	argsV.push_back(loadedValue);
+							}
+							continue;
+					        }
+						argsV.push_back(v);
+					}
 					
 					//for (auto &v : arg_values) {
 					//        //argsV.push_back(builder.CreateGlobalStringPtr(v->getName(), ""));

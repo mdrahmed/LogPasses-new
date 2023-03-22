@@ -235,8 +235,6 @@ $_ZTv0_n24_N13mqtt_callbackD0Ev = comdat any
 
 $_ZTv0_n40_N13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE = comdat any
 
-$_ZStlsIcSt11char_traitsIcEKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EERSt13basic_ostreamIT_T0_ESB_RKSt12__shared_ptrIT1_XT2_EE = comdat any
-
 $_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv = comdat any
 
 $_ZNK4mqtt7message9get_topicB5cxx11Ev = comdat any
@@ -245,9 +243,9 @@ $_ZNK4mqtt7message9to_stringB5cxx11Ev = comdat any
 
 $_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE = comdat any
 
-$_ZNKSt12__shared_ptrIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EE3getEv = comdat any
-
 $_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EE6_M_getEv = comdat any
+
+$_ZNKSt12__shared_ptrIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EE3getEv = comdat any
 
 $_ZNK4mqtt10buffer_refIcEcvbEv = comdat any
 
@@ -494,7 +492,7 @@ $_ZGVZNK4mqtt7message15get_payload_strB5cxx11EvE9EMPTY_STRB5cxx11 = comdat any
 @_ZTVN4mqtt8callbackE = linkonce_odr dso_local unnamed_addr constant { [8 x i8*] } { [8 x i8*] [i8* null, i8* bitcast ({ i8*, i8* }* @_ZTIN4mqtt8callbackE to i8*), i8* bitcast (void (%"class.mqtt::callback"*)* @_ZN4mqtt8callbackD2Ev to i8*), i8* bitcast (void (%"class.mqtt::callback"*)* @_ZN4mqtt8callbackD0Ev to i8*), i8* bitcast (void (%"class.mqtt::callback"*, %"class.std::__cxx11::basic_string"*)* @_ZN4mqtt8callback9connectedERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE to i8*), i8* bitcast (void (%"class.mqtt::callback"*, %"class.std::__cxx11::basic_string"*)* @_ZN4mqtt8callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE to i8*), i8* bitcast (void (%"class.mqtt::callback"*, %"class.std::shared_ptr.12"*)* @_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE to i8*), i8* bitcast (void (%"class.mqtt::callback"*, %"class.std::shared_ptr.112"*)* @_ZN4mqtt8callback17delivery_completeESt10shared_ptrINS_14delivery_tokenEE to i8*)] }, comdat, align 8
 @.str.16 = private unnamed_addr constant [17 x i8] c"\0AConnection lost\00", align 1
 @.str.17 = private unnamed_addr constant [8 x i8] c"cause: \00", align 1
-@.str.18 = private unnamed_addr constant [6 x i8] c"msg: \00", align 1
+@.str.18 = private unnamed_addr constant [19 x i8] c"Message Topic: %s\0A\00", align 1
 @.str.19 = private unnamed_addr constant [28 x i8] c"Message received on topic: \00", align 1
 @.str.20 = private unnamed_addr constant [18 x i8] c"Message content: \00", align 1
 @_ZZNK4mqtt7message9get_topicB5cxx11EvE9EMPTY_STRB5cxx11 = linkonce_odr dso_local global %"class.std::__cxx11::basic_string" zeroinitializer, comdat, align 8
@@ -505,83 +503,31 @@ $_ZGVZNK4mqtt7message15get_payload_strB5cxx11EvE9EMPTY_STRB5cxx11 = comdat any
 @_ZZL18__gthread_active_pvE20__gthread_active_ptr = internal constant i8* bitcast (i32 (i32*, void (i8*)*)* @__pthread_key_create to i8*), align 8
 @llvm.global_ctors = appending global [1 x { i32, void ()*, i8* }] [{ i32, void ()*, i8* } { i32 65535, void ()* @_GLOBAL__sub_I_client_subscriber.cpp, i8* null }]
 @0 = private unnamed_addr constant [13 x i8] c"\0A\0AUser:  %s\0A\00", align 1
-@1 = private unnamed_addr constant [586 x i8] c"_ZTv0_n40_N13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE is calling _ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE\0A_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE is called from this callInst  tail call void @_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %13, %\22class.std::__cxx11::basic_string\22* noundef nonnull align 8 dereferenceable(32) %14)\0A\00", align 1
-@str = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.1 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
+@1 = private unnamed_addr constant [453 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE is calling _ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE\0A_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE is called from this callInst  tail call void @_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %12, %\22class.std::shared_ptr.12\22* noundef %1)\0A\00", align 1
+@str = private unnamed_addr constant [26 x i8] c"Tue Mar 21 18:47:09 2023\0A\00", align 1
+@str.1 = private unnamed_addr constant [22 x i8] c"Unix time: 1679446029\00", align 1
 @2 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@3 = private unnamed_addr constant [92 x i8] c"_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE \00", align 1
-@4 = private unnamed_addr constant [116 x i8] c"_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE %class.mqtt_callback* %0\00", align 1
-@5 = private unnamed_addr constant [155 x i8] c"_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE %class.mqtt_callback* %0%\22class.std::__cxx11::basic_string\22* %1\00", align 1
+@3 = private unnamed_addr constant [70 x i8] c"_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE \00", align 1
+@4 = private unnamed_addr constant [94 x i8] c"_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0\00", align 1
+@5 = private unnamed_addr constant [125 x i8] c"_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0%\22class.std::shared_ptr.12\22* %1\00", align 1
 @6 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.2 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000234\0A\00", align 1
-@7 = private unnamed_addr constant [13 x i8] c"\0A\0AUser:  %s\0A\00", align 1
-@8 = private unnamed_addr constant [453 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE is calling _ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE\0A_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE is called from this callInst  tail call void @_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %12, %\22class.std::shared_ptr.12\22* noundef %1)\0A\00", align 1
-@str.3 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.4 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@9 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@10 = private unnamed_addr constant [70 x i8] c"_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE \00", align 1
-@11 = private unnamed_addr constant [94 x i8] c"_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0\00", align 1
-@12 = private unnamed_addr constant [125 x i8] c"_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0%\22class.std::shared_ptr.12\22* %1\00", align 1
-@13 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.5 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000265\0A\00", align 1
-@14 = private unnamed_addr constant [13 x i8] c"\0A\0AUser:  %s\0A\00", align 1
-@15 = private unnamed_addr constant [490 x i8] c"_ZTv0_n56_N13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE is calling _ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE\0A_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE is called from this callInst  tail call void @_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %12, %\22class.std::shared_ptr.112\22* noundef %1)\0A\00", align 1
-@str.6 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.7 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@16 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@17 = private unnamed_addr constant [79 x i8] c"_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE \00", align 1
-@18 = private unnamed_addr constant [103 x i8] c"_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE %class.mqtt_callback* %0\00", align 1
-@19 = private unnamed_addr constant [135 x i8] c"_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE %class.mqtt_callback* %0%\22class.std::shared_ptr.112\22* %1\00", align 1
-@20 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.8 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000278\0A\00", align 1
-@str.9 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.10 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@21 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@22 = private unnamed_addr constant [91 x i8] c"_ZN4mqtt8callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE \00", align 1
-@23 = private unnamed_addr constant [118 x i8] c"_ZN4mqtt8callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE %\22class.mqtt::callback\22* %0\00", align 1
-@24 = private unnamed_addr constant [157 x i8] c"_ZN4mqtt8callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE %\22class.mqtt::callback\22* %0%\22class.std::__cxx11::basic_string\22* %1\00", align 1
-@25 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.11 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000447\0A\00", align 1
-@str.12 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.13 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@26 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@27 = private unnamed_addr constant [66 x i8] c"_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE \00", align 1
-@28 = private unnamed_addr constant [93 x i8] c"_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE %\22class.mqtt::callback\22* %0\00", align 1
-@29 = private unnamed_addr constant [124 x i8] c"_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE %\22class.mqtt::callback\22* %0%\22class.std::shared_ptr.12\22* %1\00", align 1
-@30 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.14 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000364\0A\00", align 1
-@str.15 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.16 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@31 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@32 = private unnamed_addr constant [75 x i8] c"_ZN4mqtt8callback17delivery_completeESt10shared_ptrINS_14delivery_tokenEE \00", align 1
-@33 = private unnamed_addr constant [102 x i8] c"_ZN4mqtt8callback17delivery_completeESt10shared_ptrINS_14delivery_tokenEE %\22class.mqtt::callback\22* %0\00", align 1
-@34 = private unnamed_addr constant [134 x i8] c"_ZN4mqtt8callback17delivery_completeESt10shared_ptrINS_14delivery_tokenEE %\22class.mqtt::callback\22* %0%\22class.std::shared_ptr.112\22* %1\00", align 1
-@35 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.17 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000351\0A\00", align 1
-@str.18 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.19 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@36 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@37 = private unnamed_addr constant [100 x i8] c"_ZTv0_n40_N13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE \00", align 1
-@38 = private unnamed_addr constant [124 x i8] c"_ZTv0_n40_N13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE %class.mqtt_callback* %0\00", align 1
-@39 = private unnamed_addr constant [163 x i8] c"_ZTv0_n40_N13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE %class.mqtt_callback* %0%\22class.std::__cxx11::basic_string\22* %1\00", align 1
-@40 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.20 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000215\0A\00", align 1
-@str.21 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.22 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@41 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@42 = private unnamed_addr constant [78 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE \00", align 1
-@43 = private unnamed_addr constant [102 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0\00", align 1
-@44 = private unnamed_addr constant [133 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0%\22class.std::shared_ptr.12\22* %1\00", align 1
-@45 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.23 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000300\0A\00", align 1
-@str.24 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 13:15:07 2023\0A\00", align 1
-@str.25 = private unnamed_addr constant [22 x i8] c"Unix time: 1679426107\00", align 1
-@46 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
-@47 = private unnamed_addr constant [87 x i8] c"_ZTv0_n56_N13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE \00", align 1
-@48 = private unnamed_addr constant [111 x i8] c"_ZTv0_n56_N13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE %class.mqtt_callback* %0\00", align 1
-@49 = private unnamed_addr constant [143 x i8] c"_ZTv0_n56_N13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE %class.mqtt_callback* %0%\22class.std::shared_ptr.112\22* %1\00", align 1
-@50 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
-@str.26 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000269\0A\00", align 1
+@str.2 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000752\0A\00", align 1
+@str.3 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 18:47:09 2023\0A\00", align 1
+@str.4 = private unnamed_addr constant [22 x i8] c"Unix time: 1679446029\00", align 1
+@7 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
+@8 = private unnamed_addr constant [66 x i8] c"_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE \00", align 1
+@9 = private unnamed_addr constant [93 x i8] c"_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE %\22class.mqtt::callback\22* %0\00", align 1
+@10 = private unnamed_addr constant [124 x i8] c"_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE %\22class.mqtt::callback\22* %0%\22class.std::shared_ptr.12\22* %1\00", align 1
+@11 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
+@str.5 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000635\0A\00", align 1
+@str.6 = private unnamed_addr constant [26 x i8] c"Tue Mar 21 18:47:09 2023\0A\00", align 1
+@str.7 = private unnamed_addr constant [22 x i8] c"Unix time: 1679446029\00", align 1
+@12 = private unnamed_addr constant [25 x i8] c"\0Aarguments:  %s\0A %s\0A %s\0A\00", align 1
+@13 = private unnamed_addr constant [78 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE \00", align 1
+@14 = private unnamed_addr constant [102 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0\00", align 1
+@15 = private unnamed_addr constant [133 x i8] c"_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE %class.mqtt_callback* %0%\22class.std::shared_ptr.12\22* %1\00", align 1
+@16 = private unnamed_addr constant [19 x i8] c"arg_values: %s\0A%s\0A\00", align 1
+@str.8 = private unnamed_addr constant [29 x i8] c"Total Process time:0.000528\0A\00", align 1
 
 ; Function Attrs: noinline uwtable
 define internal void @__cxx_global_var_init() #0 section ".text.startup" {
@@ -1401,128 +1347,113 @@ define linkonce_odr dso_local void @_ZN4mqtt8callback9connectedERKNSt7__cxx1112b
 
 ; Function Attrs: mustprogress noinline optnone uwtable
 define linkonce_odr dso_local void @_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %1) unnamed_addr #7 comdat align 2 {
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str, i32 0, i32 0))
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.1, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @2, i32 0, i32 0), i8* getelementptr inbounds ([92 x i8], [92 x i8]* @3, i32 0, i32 0), i8* getelementptr inbounds ([116 x i8], [116 x i8]* @4, i32 0, i32 0), i8* getelementptr inbounds ([155 x i8], [155 x i8]* @5, i32 0, i32 0))
-  %3 = load %class.mqtt_callback, %class.mqtt_callback* %0, align 8
-  %4 = load %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %1, align 8
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @6, i32 0, i32 0), %class.mqtt_callback %3, %"class.std::__cxx11::basic_string" %4)
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.2, i32 0, i32 0))
-  %5 = alloca %class.mqtt_callback*, align 8
-  %6 = alloca %"class.std::__cxx11::basic_string"*, align 8
-  store %class.mqtt_callback* %0, %class.mqtt_callback** %5, align 8
-  store %"class.std::__cxx11::basic_string"* %1, %"class.std::__cxx11::basic_string"** %6, align 8
-  %7 = load %class.mqtt_callback*, %class.mqtt_callback** %5, align 8
-  %8 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([17 x i8], [17 x i8]* @.str.16, i64 0, i64 0))
-  %9 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %8, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-  %10 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %6, align 8
-  %11 = call noundef zeroext i1 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5emptyEv(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %10) #3
-  br i1 %11, label %17, label %12
+  %3 = alloca %class.mqtt_callback*, align 8
+  %4 = alloca %"class.std::__cxx11::basic_string"*, align 8
+  store %class.mqtt_callback* %0, %class.mqtt_callback** %3, align 8
+  store %"class.std::__cxx11::basic_string"* %1, %"class.std::__cxx11::basic_string"** %4, align 8
+  %5 = load %class.mqtt_callback*, %class.mqtt_callback** %3, align 8
+  %6 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([17 x i8], [17 x i8]* @.str.16, i64 0, i64 0))
+  %7 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %6, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  %8 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %4, align 8
+  %9 = call noundef zeroext i1 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5emptyEv(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %8) #3
+  br i1 %9, label %15, label %10
 
-12:                                               ; preds = %2
-  %13 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([8 x i8], [8 x i8]* @.str.17, i64 0, i64 0))
-  %14 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %6, align 8
-  %15 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %13, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %14)
-  %16 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %15, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-  br label %17
+10:                                               ; preds = %2
+  %11 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([8 x i8], [8 x i8]* @.str.17, i64 0, i64 0))
+  %12 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %4, align 8
+  %13 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %11, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %12)
+  %14 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %13, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  br label %15
 
-17:                                               ; preds = %12, %2
+15:                                               ; preds = %10, %2
   ret void
 }
 
 ; Function Attrs: mustprogress noinline optnone uwtable
 define linkonce_odr dso_local void @_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::shared_ptr.12"* noundef %1) unnamed_addr #7 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.3, i32 0, i32 0))
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.4, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @9, i32 0, i32 0), i8* getelementptr inbounds ([70 x i8], [70 x i8]* @10, i32 0, i32 0), i8* getelementptr inbounds ([94 x i8], [94 x i8]* @11, i32 0, i32 0), i8* getelementptr inbounds ([125 x i8], [125 x i8]* @12, i32 0, i32 0))
-  %3 = load %class.mqtt_callback, %class.mqtt_callback* %0, align 8
-  %4 = load %"class.mqtt::message"*, %"class.std::shared_ptr.12"* %1, align 8
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @13, i32 0, i32 0), %class.mqtt_callback %3, %"class.mqtt::message"* %4)
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.5, i32 0, i32 0))
-  %5 = alloca %class.mqtt_callback*, align 8
-  %6 = alloca %"class.std::__cxx11::basic_string", align 8
-  %7 = alloca i8*, align 8
-  %8 = alloca i32, align 4
-  store %class.mqtt_callback* %0, %class.mqtt_callback** %5, align 8
-  %9 = load %class.mqtt_callback*, %class.mqtt_callback** %5, align 8
-  %10 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([6 x i8], [6 x i8]* @.str.18, i64 0, i64 0))
-  %11 = bitcast %"class.std::shared_ptr.12"* %1 to %"class.std::__shared_ptr.13"*
-  %12 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcEKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EERSt13basic_ostreamIT_T0_ESB_RKSt12__shared_ptrIT1_XT2_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %10, %"class.std::__shared_ptr.13"* noundef nonnull align 8 dereferenceable(16) %11)
-  %13 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %12, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-  %14 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([28 x i8], [28 x i8]* @.str.19, i64 0, i64 0))
-  %15 = bitcast %"class.std::shared_ptr.12"* %1 to %"class.std::__shared_ptr_access.14"*
-  %16 = call noundef %"class.mqtt::message"* @_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.14"* noundef nonnull align 1 dereferenceable(1) %15) #3
-  %17 = call noundef nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNK4mqtt7message9get_topicB5cxx11Ev(%"class.mqtt::message"* noundef nonnull align 8 dereferenceable(120) %16)
-  %18 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %14, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %17)
-  %19 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %18, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-  %20 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([18 x i8], [18 x i8]* @.str.20, i64 0, i64 0))
-  %21 = bitcast %"class.std::shared_ptr.12"* %1 to %"class.std::__shared_ptr_access.14"*
-  %22 = call noundef %"class.mqtt::message"* @_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.14"* noundef nonnull align 1 dereferenceable(1) %21) #3
-  call void @_ZNK4mqtt7message9to_stringB5cxx11Ev(%"class.std::__cxx11::basic_string"* sret(%"class.std::__cxx11::basic_string") align 8 %6, %"class.mqtt::message"* noundef nonnull align 8 dereferenceable(120) %22)
-  %23 = invoke noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %20, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %6)
-          to label %24 unwind label %27
+  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str, i32 0, i32 0))
+  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.1, i32 0, i32 0))
+  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @2, i32 0, i32 0), i8* getelementptr inbounds ([70 x i8], [70 x i8]* @3, i32 0, i32 0), i8* getelementptr inbounds ([94 x i8], [94 x i8]* @4, i32 0, i32 0), i8* getelementptr inbounds ([125 x i8], [125 x i8]* @5, i32 0, i32 0))
+  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @6, i32 0, i32 0), %class.mqtt_callback* %0, %"class.std::shared_ptr.12"* %1)
+  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.2, i32 0, i32 0))
+  %3 = alloca %class.mqtt_callback*, align 8
+  %4 = alloca %"class.std::__cxx11::basic_string", align 8
+  %5 = alloca i8*, align 8
+  %6 = alloca i32, align 4
+  store %class.mqtt_callback* %0, %class.mqtt_callback** %3, align 8
+  %7 = load %class.mqtt_callback*, %class.mqtt_callback** %3, align 8
+  %8 = bitcast %"class.std::shared_ptr.12"* %1 to %"class.std::__shared_ptr_access.14"*
+  %9 = call noundef %"class.mqtt::message"* @_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.14"* noundef nonnull align 1 dereferenceable(1) %8) #3
+  %10 = call noundef nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNK4mqtt7message9get_topicB5cxx11Ev(%"class.mqtt::message"* noundef nonnull align 8 dereferenceable(120) %9)
+  %11 = call noundef i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %10) #3
+  %12 = call i32 (i8*, ...) @printf(i8* noundef getelementptr inbounds ([19 x i8], [19 x i8]* @.str.18, i64 0, i64 0), i8* noundef %11)
+  %13 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([28 x i8], [28 x i8]* @.str.19, i64 0, i64 0))
+  %14 = bitcast %"class.std::shared_ptr.12"* %1 to %"class.std::__shared_ptr_access.14"*
+  %15 = call noundef %"class.mqtt::message"* @_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.14"* noundef nonnull align 1 dereferenceable(1) %14) #3
+  %16 = call noundef nonnull align 8 dereferenceable(32) %"class.std::__cxx11::basic_string"* @_ZNK4mqtt7message9get_topicB5cxx11Ev(%"class.mqtt::message"* noundef nonnull align 8 dereferenceable(120) %15)
+  %17 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %13, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %16)
+  %18 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %17, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+  %19 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([18 x i8], [18 x i8]* @.str.20, i64 0, i64 0))
+  %20 = bitcast %"class.std::shared_ptr.12"* %1 to %"class.std::__shared_ptr_access.14"*
+  %21 = call noundef %"class.mqtt::message"* @_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.14"* noundef nonnull align 1 dereferenceable(1) %20) #3
+  call void @_ZNK4mqtt7message9to_stringB5cxx11Ev(%"class.std::__cxx11::basic_string"* sret(%"class.std::__cxx11::basic_string") align 8 %4, %"class.mqtt::message"* noundef nonnull align 8 dereferenceable(120) %21)
+  %22 = invoke noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcESaIcEERSt13basic_ostreamIT_T0_ES7_RKNSt7__cxx1112basic_stringIS4_S5_T1_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %19, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %4)
+          to label %23 unwind label %26
 
-24:                                               ; preds = %2
-  %25 = invoke noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %23, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
-          to label %26 unwind label %27
+23:                                               ; preds = %2
+  %24 = invoke noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %22, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+          to label %25 unwind label %26
 
-26:                                               ; preds = %24
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %6) #3
+25:                                               ; preds = %23
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %4) #3
   ret void
 
-27:                                               ; preds = %24, %2
-  %28 = landingpad { i8*, i32 }
+26:                                               ; preds = %23, %2
+  %27 = landingpad { i8*, i32 }
           cleanup
-  %29 = extractvalue { i8*, i32 } %28, 0
-  store i8* %29, i8** %7, align 8
-  %30 = extractvalue { i8*, i32 } %28, 1
-  store i32 %30, i32* %8, align 4
-  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %6) #3
-  br label %31
+  %28 = extractvalue { i8*, i32 } %27, 0
+  store i8* %28, i8** %5, align 8
+  %29 = extractvalue { i8*, i32 } %27, 1
+  store i32 %29, i32* %6, align 4
+  call void @_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEED1Ev(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %4) #3
+  br label %30
 
-31:                                               ; preds = %27
-  %32 = load i8*, i8** %7, align 8
-  %33 = load i32, i32* %8, align 4
-  %34 = insertvalue { i8*, i32 } undef, i8* %32, 0
-  %35 = insertvalue { i8*, i32 } %34, i32 %33, 1
-  resume { i8*, i32 } %35
+30:                                               ; preds = %26
+  %31 = load i8*, i8** %5, align 8
+  %32 = load i32, i32* %6, align 4
+  %33 = insertvalue { i8*, i32 } undef, i8* %31, 0
+  %34 = insertvalue { i8*, i32 } %33, i32 %32, 1
+  resume { i8*, i32 } %34
 }
 
 ; Function Attrs: mustprogress noinline optnone uwtable
 define linkonce_odr dso_local void @_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::shared_ptr.112"* noundef %1) unnamed_addr #7 comdat align 2 {
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.6, i32 0, i32 0))
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.7, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @16, i32 0, i32 0), i8* getelementptr inbounds ([79 x i8], [79 x i8]* @17, i32 0, i32 0), i8* getelementptr inbounds ([103 x i8], [103 x i8]* @18, i32 0, i32 0), i8* getelementptr inbounds ([135 x i8], [135 x i8]* @19, i32 0, i32 0))
-  %3 = load %class.mqtt_callback, %class.mqtt_callback* %0, align 8
-  %4 = load %"class.mqtt::delivery_token"*, %"class.std::shared_ptr.112"* %1, align 8
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @20, i32 0, i32 0), %class.mqtt_callback %3, %"class.mqtt::delivery_token"* %4)
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.8, i32 0, i32 0))
-  %5 = alloca %class.mqtt_callback*, align 8
-  store %class.mqtt_callback* %0, %class.mqtt_callback** %5, align 8
-  %6 = load %class.mqtt_callback*, %class.mqtt_callback** %5, align 8
-  %7 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([31 x i8], [31 x i8]* @.str.21, i64 0, i64 0))
-  %8 = bitcast %"class.std::shared_ptr.112"* %1 to %"class.std::__shared_ptr.113"*
-  %9 = call noundef zeroext i1 @_ZNKSt12__shared_ptrIN4mqtt14delivery_tokenELN9__gnu_cxx12_Lock_policyE2EEcvbEv(%"class.std::__shared_ptr.113"* noundef nonnull align 8 dereferenceable(16) %8)
-  br i1 %9, label %10, label %19
+  %3 = alloca %class.mqtt_callback*, align 8
+  store %class.mqtt_callback* %0, %class.mqtt_callback** %3, align 8
+  %4 = load %class.mqtt_callback*, %class.mqtt_callback** %3, align 8
+  %5 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) @_ZSt4cout, i8* noundef getelementptr inbounds ([31 x i8], [31 x i8]* @.str.21, i64 0, i64 0))
+  %6 = bitcast %"class.std::shared_ptr.112"* %1 to %"class.std::__shared_ptr.113"*
+  %7 = call noundef zeroext i1 @_ZNKSt12__shared_ptrIN4mqtt14delivery_tokenELN9__gnu_cxx12_Lock_policyE2EEcvbEv(%"class.std::__shared_ptr.113"* noundef nonnull align 8 dereferenceable(16) %6)
+  br i1 %7, label %8, label %17
 
-10:                                               ; preds = %2
-  %11 = bitcast %"class.std::shared_ptr.112"* %1 to %"class.std::__shared_ptr_access.114"*
-  %12 = call noundef %"class.mqtt::delivery_token"* @_ZNKSt19__shared_ptr_accessIN4mqtt14delivery_tokenELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.114"* noundef nonnull align 1 dereferenceable(1) %11) #3
-  %13 = bitcast %"class.mqtt::delivery_token"* %12 to %"class.mqtt::token"*
-  %14 = bitcast %"class.mqtt::token"* %13 to i32 (%"class.mqtt::token"*)***
-  %15 = load i32 (%"class.mqtt::token"*)**, i32 (%"class.mqtt::token"*)*** %14, align 8
-  %16 = getelementptr inbounds i32 (%"class.mqtt::token"*)*, i32 (%"class.mqtt::token"*)** %15, i64 4
-  %17 = load i32 (%"class.mqtt::token"*)*, i32 (%"class.mqtt::token"*)** %16, align 8
-  %18 = call noundef i32 %17(%"class.mqtt::token"* noundef nonnull align 8 dereferenceable(232) %13)
-  br label %20
+8:                                                ; preds = %2
+  %9 = bitcast %"class.std::shared_ptr.112"* %1 to %"class.std::__shared_ptr_access.114"*
+  %10 = call noundef %"class.mqtt::delivery_token"* @_ZNKSt19__shared_ptr_accessIN4mqtt14delivery_tokenELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.114"* noundef nonnull align 1 dereferenceable(1) %9) #3
+  %11 = bitcast %"class.mqtt::delivery_token"* %10 to %"class.mqtt::token"*
+  %12 = bitcast %"class.mqtt::token"* %11 to i32 (%"class.mqtt::token"*)***
+  %13 = load i32 (%"class.mqtt::token"*)**, i32 (%"class.mqtt::token"*)*** %12, align 8
+  %14 = getelementptr inbounds i32 (%"class.mqtt::token"*)*, i32 (%"class.mqtt::token"*)** %13, i64 4
+  %15 = load i32 (%"class.mqtt::token"*)*, i32 (%"class.mqtt::token"*)** %14, align 8
+  %16 = call noundef i32 %15(%"class.mqtt::token"* noundef nonnull align 8 dereferenceable(232) %11)
+  br label %18
 
-19:                                               ; preds = %2
-  br label %20
+17:                                               ; preds = %2
+  br label %18
 
-20:                                               ; preds = %19, %10
-  %21 = phi i32 [ %18, %10 ], [ -1, %19 ]
-  %22 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %7, i32 noundef %21)
-  %23 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %22, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
+18:                                               ; preds = %17, %8
+  %19 = phi i32 [ %16, %8 ], [ -1, %17 ]
+  %20 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEi(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %5, i32 noundef %19)
+  %21 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPFRSoS_E(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %20, %"class.std::basic_ostream"* (%"class.std::basic_ostream"*)* noundef @_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_)
   ret void
 }
 
@@ -1547,48 +1478,32 @@ define linkonce_odr dso_local void @_ZN4mqtt8callbackD0Ev(%"class.mqtt::callback
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
 define linkonce_odr dso_local void @_ZN4mqtt8callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(%"class.mqtt::callback"* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %1) unnamed_addr #6 comdat align 2 {
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.9, i32 0, i32 0))
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.10, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @21, i32 0, i32 0), i8* getelementptr inbounds ([91 x i8], [91 x i8]* @22, i32 0, i32 0), i8* getelementptr inbounds ([118 x i8], [118 x i8]* @23, i32 0, i32 0), i8* getelementptr inbounds ([157 x i8], [157 x i8]* @24, i32 0, i32 0))
-  %3 = load %"class.mqtt::callback", %"class.mqtt::callback"* %0, align 8
-  %4 = load %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %1, align 8
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @25, i32 0, i32 0), %"class.mqtt::callback" %3, %"class.std::__cxx11::basic_string" %4)
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.11, i32 0, i32 0))
-  %5 = alloca %"class.mqtt::callback"*, align 8
-  %6 = alloca %"class.std::__cxx11::basic_string"*, align 8
-  store %"class.mqtt::callback"* %0, %"class.mqtt::callback"** %5, align 8
-  store %"class.std::__cxx11::basic_string"* %1, %"class.std::__cxx11::basic_string"** %6, align 8
-  %7 = load %"class.mqtt::callback"*, %"class.mqtt::callback"** %5, align 8
+  %3 = alloca %"class.mqtt::callback"*, align 8
+  %4 = alloca %"class.std::__cxx11::basic_string"*, align 8
+  store %"class.mqtt::callback"* %0, %"class.mqtt::callback"** %3, align 8
+  store %"class.std::__cxx11::basic_string"* %1, %"class.std::__cxx11::basic_string"** %4, align 8
+  %5 = load %"class.mqtt::callback"*, %"class.mqtt::callback"** %3, align 8
   ret void
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
 define linkonce_odr dso_local void @_ZN4mqtt8callback15message_arrivedESt10shared_ptrIKNS_7messageEE(%"class.mqtt::callback"* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::shared_ptr.12"* noundef %1) unnamed_addr #6 comdat align 2 {
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.12, i32 0, i32 0))
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.13, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @26, i32 0, i32 0), i8* getelementptr inbounds ([66 x i8], [66 x i8]* @27, i32 0, i32 0), i8* getelementptr inbounds ([93 x i8], [93 x i8]* @28, i32 0, i32 0), i8* getelementptr inbounds ([124 x i8], [124 x i8]* @29, i32 0, i32 0))
-  %3 = load %"class.mqtt::callback", %"class.mqtt::callback"* %0, align 8
-  %4 = load %"class.mqtt::message"*, %"class.std::shared_ptr.12"* %1, align 8
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @30, i32 0, i32 0), %"class.mqtt::callback" %3, %"class.mqtt::message"* %4)
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.14, i32 0, i32 0))
-  %5 = alloca %"class.mqtt::callback"*, align 8
-  store %"class.mqtt::callback"* %0, %"class.mqtt::callback"** %5, align 8
-  %6 = load %"class.mqtt::callback"*, %"class.mqtt::callback"** %5, align 8
+  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.3, i32 0, i32 0))
+  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.4, i32 0, i32 0))
+  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @7, i32 0, i32 0), i8* getelementptr inbounds ([66 x i8], [66 x i8]* @8, i32 0, i32 0), i8* getelementptr inbounds ([93 x i8], [93 x i8]* @9, i32 0, i32 0), i8* getelementptr inbounds ([124 x i8], [124 x i8]* @10, i32 0, i32 0))
+  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @11, i32 0, i32 0), %"class.mqtt::callback"* %0, %"class.std::shared_ptr.12"* %1)
+  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.5, i32 0, i32 0))
+  %3 = alloca %"class.mqtt::callback"*, align 8
+  store %"class.mqtt::callback"* %0, %"class.mqtt::callback"** %3, align 8
+  %4 = load %"class.mqtt::callback"*, %"class.mqtt::callback"** %3, align 8
   ret void
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
 define linkonce_odr dso_local void @_ZN4mqtt8callback17delivery_completeESt10shared_ptrINS_14delivery_tokenEE(%"class.mqtt::callback"* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::shared_ptr.112"* noundef %1) unnamed_addr #6 comdat align 2 {
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.15, i32 0, i32 0))
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.16, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @31, i32 0, i32 0), i8* getelementptr inbounds ([75 x i8], [75 x i8]* @32, i32 0, i32 0), i8* getelementptr inbounds ([102 x i8], [102 x i8]* @33, i32 0, i32 0), i8* getelementptr inbounds ([134 x i8], [134 x i8]* @34, i32 0, i32 0))
-  %3 = load %"class.mqtt::callback", %"class.mqtt::callback"* %0, align 8
-  %4 = load %"class.mqtt::delivery_token"*, %"class.std::shared_ptr.112"* %1, align 8
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @35, i32 0, i32 0), %"class.mqtt::callback" %3, %"class.mqtt::delivery_token"* %4)
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.17, i32 0, i32 0))
-  %5 = alloca %"class.mqtt::callback"*, align 8
-  store %"class.mqtt::callback"* %0, %"class.mqtt::callback"** %5, align 8
-  %6 = load %"class.mqtt::callback"*, %"class.mqtt::callback"** %5, align 8
+  %3 = alloca %"class.mqtt::callback"*, align 8
+  store %"class.mqtt::callback"* %0, %"class.mqtt::callback"** %3, align 8
+  %4 = load %"class.mqtt::callback"*, %"class.mqtt::callback"** %3, align 8
   ret void
 }
 
@@ -1617,46 +1532,25 @@ declare noundef zeroext i1 @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIc
 
 ; Function Attrs: noinline optnone uwtable
 define linkonce_odr dso_local void @_ZTv0_n40_N13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(%class.mqtt_callback* noundef %0, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %1) unnamed_addr #11 comdat align 2 {
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.18, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.19, i32 0, i32 0))
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @36, i32 0, i32 0), i8* getelementptr inbounds ([100 x i8], [100 x i8]* @37, i32 0, i32 0), i8* getelementptr inbounds ([124 x i8], [124 x i8]* @38, i32 0, i32 0), i8* getelementptr inbounds ([163 x i8], [163 x i8]* @39, i32 0, i32 0))
-  %3 = load %class.mqtt_callback, %class.mqtt_callback* %0, align 8
-  %4 = load %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string"* %1, align 8
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @40, i32 0, i32 0), %class.mqtt_callback %3, %"class.std::__cxx11::basic_string" %4)
-  %calltmp5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.20, i32 0, i32 0))
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @0, i32 0, i32 0), i8* getelementptr inbounds ([586 x i8], [586 x i8]* @1, i32 0, i32 0))
-  %5 = alloca %class.mqtt_callback*, align 8
-  %6 = alloca %"class.std::__cxx11::basic_string"*, align 8
-  store %class.mqtt_callback* %0, %class.mqtt_callback** %5, align 8
-  store %"class.std::__cxx11::basic_string"* %1, %"class.std::__cxx11::basic_string"** %6, align 8
-  %7 = load %class.mqtt_callback*, %class.mqtt_callback** %5, align 8
-  %8 = bitcast %class.mqtt_callback* %7 to i8*
-  %9 = bitcast i8* %8 to i8**
-  %10 = load i8*, i8** %9, align 8
-  %11 = getelementptr inbounds i8, i8* %10, i64 -40
-  %12 = bitcast i8* %11 to i64*
-  %13 = load i64, i64* %12, align 8
-  %14 = getelementptr inbounds i8, i8* %8, i64 %13
-  %15 = bitcast i8* %14 to %class.mqtt_callback*
-  %16 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %6, align 8
-  tail call void @_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %15, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %16)
+  %3 = alloca %class.mqtt_callback*, align 8
+  %4 = alloca %"class.std::__cxx11::basic_string"*, align 8
+  store %class.mqtt_callback* %0, %class.mqtt_callback** %3, align 8
+  store %"class.std::__cxx11::basic_string"* %1, %"class.std::__cxx11::basic_string"** %4, align 8
+  %5 = load %class.mqtt_callback*, %class.mqtt_callback** %3, align 8
+  %6 = bitcast %class.mqtt_callback* %5 to i8*
+  %7 = bitcast i8* %6 to i8**
+  %8 = load i8*, i8** %7, align 8
+  %9 = getelementptr inbounds i8, i8* %8, i64 -40
+  %10 = bitcast i8* %9 to i64*
+  %11 = load i64, i64* %10, align 8
+  %12 = getelementptr inbounds i8, i8* %6, i64 %11
+  %13 = bitcast i8* %12 to %class.mqtt_callback*
+  %14 = load %"class.std::__cxx11::basic_string"*, %"class.std::__cxx11::basic_string"** %4, align 8
+  tail call void @_ZN13mqtt_callback15connection_lostERKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %13, %"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32) %14)
   ret void
 }
 
-; Function Attrs: mustprogress noinline optnone uwtable
-define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZStlsIcSt11char_traitsIcEKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EERSt13basic_ostreamIT_T0_ESB_RKSt12__shared_ptrIT1_XT2_EE(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %0, %"class.std::__shared_ptr.13"* noundef nonnull align 8 dereferenceable(16) %1) #7 comdat {
-  %3 = alloca %"class.std::basic_ostream"*, align 8
-  %4 = alloca %"class.std::__shared_ptr.13"*, align 8
-  store %"class.std::basic_ostream"* %0, %"class.std::basic_ostream"** %3, align 8
-  store %"class.std::__shared_ptr.13"* %1, %"class.std::__shared_ptr.13"** %4, align 8
-  %5 = load %"class.std::basic_ostream"*, %"class.std::basic_ostream"** %3, align 8
-  %6 = load %"class.std::__shared_ptr.13"*, %"class.std::__shared_ptr.13"** %4, align 8
-  %7 = call noundef %"class.mqtt::message"* @_ZNKSt12__shared_ptrIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EE3getEv(%"class.std::__shared_ptr.13"* noundef nonnull align 8 dereferenceable(16) %6) #3
-  %8 = bitcast %"class.mqtt::message"* %7 to i8*
-  %9 = call noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPKv(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8) %5, i8* noundef %8)
-  %10 = load %"class.std::basic_ostream"*, %"class.std::basic_ostream"** %3, align 8
-  ret %"class.std::basic_ostream"* %10
-}
+declare i32 @printf(i8* noundef, ...) #1
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
 define linkonce_odr dso_local noundef %"class.mqtt::message"* @_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv(%"class.std::__shared_ptr_access.14"* noundef nonnull align 1 dereferenceable(1) %0) #6 comdat align 2 {
@@ -1705,6 +1599,9 @@ define linkonce_odr dso_local noundef nonnull align 8 dereferenceable(32) %"clas
   ret %"class.std::__cxx11::basic_string"* %19
 }
 
+; Function Attrs: nounwind
+declare noundef i8* @_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv(%"class.std::__cxx11::basic_string"* noundef nonnull align 8 dereferenceable(32)) #2
+
 ; Function Attrs: mustprogress noinline optnone uwtable
 define linkonce_odr dso_local void @_ZNK4mqtt7message9to_stringB5cxx11Ev(%"class.std::__cxx11::basic_string"* noalias sret(%"class.std::__cxx11::basic_string") align 8 %0, %"class.mqtt::message"* noundef nonnull align 8 dereferenceable(120) %1) #7 comdat align 2 {
   %3 = alloca i8*, align 8
@@ -1720,39 +1617,25 @@ define linkonce_odr dso_local void @_ZNK4mqtt7message9to_stringB5cxx11Ev(%"class
 
 ; Function Attrs: noinline optnone uwtable
 define linkonce_odr dso_local void @_ZTv0_n48_N13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE(%class.mqtt_callback* noundef %0, %"class.std::shared_ptr.12"* noundef %1) unnamed_addr #11 comdat align 2 {
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.21, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.22, i32 0, i32 0))
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @41, i32 0, i32 0), i8* getelementptr inbounds ([78 x i8], [78 x i8]* @42, i32 0, i32 0), i8* getelementptr inbounds ([102 x i8], [102 x i8]* @43, i32 0, i32 0), i8* getelementptr inbounds ([133 x i8], [133 x i8]* @44, i32 0, i32 0))
-  %3 = load %class.mqtt_callback, %class.mqtt_callback* %0, align 8
-  %4 = load %"class.mqtt::message"*, %"class.std::shared_ptr.12"* %1, align 8
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @45, i32 0, i32 0), %class.mqtt_callback %3, %"class.mqtt::message"* %4)
-  %calltmp5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.23, i32 0, i32 0))
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @7, i32 0, i32 0), i8* getelementptr inbounds ([453 x i8], [453 x i8]* @8, i32 0, i32 0))
-  %5 = alloca %class.mqtt_callback*, align 8
-  store %class.mqtt_callback* %0, %class.mqtt_callback** %5, align 8
-  %6 = load %class.mqtt_callback*, %class.mqtt_callback** %5, align 8
-  %7 = bitcast %class.mqtt_callback* %6 to i8*
-  %8 = bitcast i8* %7 to i8**
-  %9 = load i8*, i8** %8, align 8
-  %10 = getelementptr inbounds i8, i8* %9, i64 -48
-  %11 = bitcast i8* %10 to i64*
-  %12 = load i64, i64* %11, align 8
-  %13 = getelementptr inbounds i8, i8* %7, i64 %12
-  %14 = bitcast i8* %13 to %class.mqtt_callback*
-  tail call void @_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %14, %"class.std::shared_ptr.12"* noundef %1)
+  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.6, i32 0, i32 0))
+  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.7, i32 0, i32 0))
+  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @12, i32 0, i32 0), i8* getelementptr inbounds ([78 x i8], [78 x i8]* @13, i32 0, i32 0), i8* getelementptr inbounds ([102 x i8], [102 x i8]* @14, i32 0, i32 0), i8* getelementptr inbounds ([133 x i8], [133 x i8]* @15, i32 0, i32 0))
+  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @16, i32 0, i32 0), %class.mqtt_callback* %0, %"class.std::shared_ptr.12"* %1)
+  %calltmp5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.8, i32 0, i32 0))
+  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @0, i32 0, i32 0), i8* getelementptr inbounds ([453 x i8], [453 x i8]* @1, i32 0, i32 0))
+  %3 = alloca %class.mqtt_callback*, align 8
+  store %class.mqtt_callback* %0, %class.mqtt_callback** %3, align 8
+  %4 = load %class.mqtt_callback*, %class.mqtt_callback** %3, align 8
+  %5 = bitcast %class.mqtt_callback* %4 to i8*
+  %6 = bitcast i8* %5 to i8**
+  %7 = load i8*, i8** %6, align 8
+  %8 = getelementptr inbounds i8, i8* %7, i64 -48
+  %9 = bitcast i8* %8 to i64*
+  %10 = load i64, i64* %9, align 8
+  %11 = getelementptr inbounds i8, i8* %5, i64 %10
+  %12 = bitcast i8* %11 to %class.mqtt_callback*
+  tail call void @_ZN13mqtt_callback15message_arrivedESt10shared_ptrIKN4mqtt7messageEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %12, %"class.std::shared_ptr.12"* noundef %1)
   ret void
-}
-
-declare noundef nonnull align 8 dereferenceable(8) %"class.std::basic_ostream"* @_ZNSolsEPKv(%"class.std::basic_ostream"* noundef nonnull align 8 dereferenceable(8), i8* noundef) #1
-
-; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define linkonce_odr dso_local noundef %"class.mqtt::message"* @_ZNKSt12__shared_ptrIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EE3getEv(%"class.std::__shared_ptr.13"* noundef nonnull align 8 dereferenceable(16) %0) #6 comdat align 2 {
-  %2 = alloca %"class.std::__shared_ptr.13"*, align 8
-  store %"class.std::__shared_ptr.13"* %0, %"class.std::__shared_ptr.13"** %2, align 8
-  %3 = load %"class.std::__shared_ptr.13"*, %"class.std::__shared_ptr.13"** %2, align 8
-  %4 = getelementptr inbounds %"class.std::__shared_ptr.13", %"class.std::__shared_ptr.13"* %3, i32 0, i32 0
-  %5 = load %"class.mqtt::message"*, %"class.mqtt::message"** %4, align 8
-  ret %"class.mqtt::message"* %5
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
@@ -1762,6 +1645,16 @@ define linkonce_odr dso_local noundef %"class.mqtt::message"* @_ZNKSt19__shared_
   %3 = load %"class.std::__shared_ptr_access.14"*, %"class.std::__shared_ptr_access.14"** %2, align 8
   %4 = bitcast %"class.std::__shared_ptr_access.14"* %3 to %"class.std::__shared_ptr.13"*
   %5 = call noundef %"class.mqtt::message"* @_ZNKSt12__shared_ptrIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EE3getEv(%"class.std::__shared_ptr.13"* noundef nonnull align 8 dereferenceable(16) %4) #3
+  ret %"class.mqtt::message"* %5
+}
+
+; Function Attrs: mustprogress noinline nounwind optnone uwtable
+define linkonce_odr dso_local noundef %"class.mqtt::message"* @_ZNKSt12__shared_ptrIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2EE3getEv(%"class.std::__shared_ptr.13"* noundef nonnull align 8 dereferenceable(16) %0) #6 comdat align 2 {
+  %2 = alloca %"class.std::__shared_ptr.13"*, align 8
+  store %"class.std::__shared_ptr.13"* %0, %"class.std::__shared_ptr.13"** %2, align 8
+  %3 = load %"class.std::__shared_ptr.13"*, %"class.std::__shared_ptr.13"** %2, align 8
+  %4 = getelementptr inbounds %"class.std::__shared_ptr.13", %"class.std::__shared_ptr.13"* %3, i32 0, i32 0
+  %5 = load %"class.mqtt::message"*, %"class.mqtt::message"** %4, align 8
   ret %"class.mqtt::message"* %5
 }
 
@@ -1904,26 +1797,18 @@ define linkonce_odr dso_local noundef %"class.mqtt::delivery_token"* @_ZNKSt19__
 
 ; Function Attrs: noinline optnone uwtable
 define linkonce_odr dso_local void @_ZTv0_n56_N13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE(%class.mqtt_callback* noundef %0, %"class.std::shared_ptr.112"* noundef %1) unnamed_addr #11 comdat align 2 {
-  %calltmp1 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([26 x i8], [26 x i8]* @str.24, i32 0, i32 0))
-  %calltmp2 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([22 x i8], [22 x i8]* @str.25, i32 0, i32 0))
-  %calltmp3 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([25 x i8], [25 x i8]* @46, i32 0, i32 0), i8* getelementptr inbounds ([87 x i8], [87 x i8]* @47, i32 0, i32 0), i8* getelementptr inbounds ([111 x i8], [111 x i8]* @48, i32 0, i32 0), i8* getelementptr inbounds ([143 x i8], [143 x i8]* @49, i32 0, i32 0))
-  %3 = load %class.mqtt_callback, %class.mqtt_callback* %0, align 8
-  %4 = load %"class.mqtt::delivery_token"*, %"class.std::shared_ptr.112"* %1, align 8
-  %calltmp4 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([19 x i8], [19 x i8]* @50, i32 0, i32 0), %class.mqtt_callback %3, %"class.mqtt::delivery_token"* %4)
-  %calltmp5 = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([29 x i8], [29 x i8]* @str.26, i32 0, i32 0))
-  %calltmp = call i32 (i8*, ...) @printf(i8* getelementptr inbounds ([13 x i8], [13 x i8]* @14, i32 0, i32 0), i8* getelementptr inbounds ([490 x i8], [490 x i8]* @15, i32 0, i32 0))
-  %5 = alloca %class.mqtt_callback*, align 8
-  store %class.mqtt_callback* %0, %class.mqtt_callback** %5, align 8
-  %6 = load %class.mqtt_callback*, %class.mqtt_callback** %5, align 8
-  %7 = bitcast %class.mqtt_callback* %6 to i8*
-  %8 = bitcast i8* %7 to i8**
-  %9 = load i8*, i8** %8, align 8
-  %10 = getelementptr inbounds i8, i8* %9, i64 -56
-  %11 = bitcast i8* %10 to i64*
-  %12 = load i64, i64* %11, align 8
-  %13 = getelementptr inbounds i8, i8* %7, i64 %12
-  %14 = bitcast i8* %13 to %class.mqtt_callback*
-  tail call void @_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %14, %"class.std::shared_ptr.112"* noundef %1)
+  %3 = alloca %class.mqtt_callback*, align 8
+  store %class.mqtt_callback* %0, %class.mqtt_callback** %3, align 8
+  %4 = load %class.mqtt_callback*, %class.mqtt_callback** %3, align 8
+  %5 = bitcast %class.mqtt_callback* %4 to i8*
+  %6 = bitcast i8* %5 to i8**
+  %7 = load i8*, i8** %6, align 8
+  %8 = getelementptr inbounds i8, i8* %7, i64 -56
+  %9 = bitcast i8* %8 to i64*
+  %10 = load i64, i64* %9, align 8
+  %11 = getelementptr inbounds i8, i8* %5, i64 %10
+  %12 = bitcast i8* %11 to %class.mqtt_callback*
+  tail call void @_ZN13mqtt_callback17delivery_completeESt10shared_ptrIN4mqtt14delivery_tokenEE(%class.mqtt_callback* noundef nonnull align 8 dereferenceable(8) %12, %"class.std::shared_ptr.112"* noundef %1)
   ret void
 }
 
@@ -3276,8 +3161,6 @@ define internal void @_GLOBAL__sub_I_client_subscriber.cpp() #0 section ".text.s
   call void @__cxx_global_var_init.8()
   ret void
 }
-
-declare i32 @printf(i8*, ...)
 
 attributes #0 = { noinline uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }

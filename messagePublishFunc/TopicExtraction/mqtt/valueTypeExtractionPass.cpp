@@ -1,4 +1,4 @@
-// This is the pass which is extract string from a pointer not from a shared pointer
+// Type is extracted in typeExtractionPass.cpp, so, I am trying to get the value pointer the shared pointer is pointing to with this pass.
 
 #include <unordered_set>
 #include <unordered_map>
@@ -71,8 +71,9 @@ bool CPSTracker::runOnModule(Module &M) {
 	
 		// Added HBW functions	
 		//if(F.getName().contains("subtract")){
-		if(F.getName().contains("message_arrived") || F.getName().contains("get_topic") || F.getName().contains("publish") || F.getName().contains("disconnect") || F.getName().contains("connection_lost") || F.getName().contains("delivery_complete")){
-		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("requestOrder") || F.getName().contains("startThread") || F.getName().contains("start_thread") || F.getName().contains("run") || F.getName().contains("fsmStep") || F.getName().contains("printState") || F.getName().contains("setTarget") || F.getName().contains("moveDeliveryInAndGrip") || F.getName().contains("moveNFC") ){
+		//delivery_complete contains the token
+		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("connection_lost") || F.getName().contains("delivery_complete")){
+		if(F.getName().contains("message_arrived")){
 			//This for loop will get the user function i.e., suppose I got a function "message_arrived", then following iterator will tell me the function calling this function.		
 			
 			if(F.getName().contains("printf"))
@@ -177,54 +178,80 @@ bool CPSTracker::runOnModule(Module &M) {
 					// Worked with 32 bit int and then all values except pointer and array worked
 					
 					outs()<<"\nFunction name:"<<F.getName()<<"\n";
-
+					// get_topic function
+					llvm::Function* getTopicFunc = F.getParent()->getFunction("_ZNK4mqtt7message9get_topicB5cxx11Ev");
+					
+					llvm::Function* toStringFn = F.getParent()->getFunction("_ZNK4mqtt7message9to_stringB5cxx11Ev");
+					outs()<<"get_topic Function: "<<*toStringFn<<"\n";
+					llvm::FunctionType* toStringFnType = llvm::FunctionType::get(llvm::Type::getInt8PtrTy(context), { llvm::Type::getInt8PtrTy(context) }, false);
+                                        llvm::FunctionCallee toStringFunc = M.getOrInsertFunction("_ZNK4mqtt7message9to_stringB5cxx11Ev", toStringFnType);
+					
+					llvm::FunctionType* getTopicFnType = llvm::FunctionType::get(llvm::Type::getInt8PtrTy(context), { llvm::Type::getInt8PtrTy(context) }, false);
+					llvm::FunctionCallee getTopicFn = M.getOrInsertFunction("_ZNK4mqtt7message9get_topicB5cxx11Ev", getTopicFnType);
 					for (auto &v : arg_values) {
-						if(v->getType()->isPointerTy()){
-							//String is loaded here
-							llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-							//String is pushed to asgsV
-							argsV.push_back(loadedValue);
-							
-							// trying to extract topic from here
-							//v->dump();
-							//llvm::Value* sharedPtrValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-							//llvm::Value* ptrValue = builder.CreateExtractValue(sharedPtrValue, {0});
-							//llvm::Value* loadedValue = builder.CreateLoad(ptrValue,"");
-							//argsV.push_back(loadedValue);
-							//argsV.push_back(builder.CreateGlobalStringPtr("pointer"));
-							
-							outs()<<"Pointer type:"<< *v->getType() <<"\n";
-							outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
-
-							std::string typeName;
-							raw_string_ostream rso(typeName);
-							v->print(rso);
-							rso.flush();
-							outs()<<"Type: "<<typeName <<"\n";
-
-							// not able to find shared pointer
-							/*
-							llvm::Type *elementType = v->getType()->getPointerElementType();
-							if (auto *ptrType = llvm::dyn_cast<llvm::PointerType>(elementType)) {
-							    llvm::Type *pointedType = ptrType->getPointerElementType();
-							    outs()<<"It's a pointer.\n";
-							    if (pointedType->isIntegerTy(8)) {
-							        llvm::Type *sharedPtrType = llvm::Type::getInt8PtrTy(context); // modify for actual shared pointer type
-								outs()<<"Got the original shared pointer type.\n";
-							        if (ptrType == sharedPtrType) {
-							            // Pointer to a shared pointer of a string
-							            llvm::Value *sharedPtrValue = builder.CreateLoad(elementType, v);
-							            llvm::Value *loadedValue = builder.CreateLoad(sharedPtrValue->getType()->getPointerElementType(), sharedPtrValue);
-							            argsV.push_back(loadedValue);
-								    outs()<<"It's a shared pointer.\n";
-							        }
-							    }
-							}
-							*/
-							continue;
-					        }
+                                        	if(v->getType()->isPointerTy()){
+                                                        //llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+                                                        //argsV.push_back(loadedValue);
+                                                        outs()<<"Name: "<<v->getName()<<"\n";
+                                                        if (v->getName() == "msg") {
+                                                                argsV.push_back(builder.CreatePointerCast(builder.CreateCall(toStringFunc, v), llvm::Type::getInt8PtrTy(context)));
+								//argsV.push_back(builder.CreateGlobalStringPtr("This is msg part", ""));
+								continue;
+                                                        }
+						}
 						argsV.push_back(v);
-					}
+					 }
+
+					// Extracted type of 1st pointer in here
+				//	for (auto &v : arg_values) {
+				//		if(v->getType()->isPointerTy()){
+				//			//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+				//			//argsV.push_back(loadedValue);
+				//			outs()<<"Name: "<<v->getName()<<"\n";	
+				//			if (v->getName() == "msg") {
+				//				argsV.push_back(builder.CreatePointerCast(builder.CreateCall(mod->getFunction("_ZN4mqtt13const_message10get_topicEv"), msg), llvm::Type::getInt8PtrTy(context)));
+				//			}
+				//			outs()<<"Pointer type:"<< *v->getType() <<"\n";
+				//			auto containedType = v->getType()->getContainedType(0);
+				//			outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
+				//			// If Contained type returns shared pointer then the contained contained type is a structure
+				//			//outs()<<"Contained contained type: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
+				//			//outs()<<"Struct name: "<<containedType->getStructName()<<"\n";
+				//			if (containedType->getStructName().startswith("class.std::shared_ptr")) {
+				//				outs() << "Shared pointer type: " << *v->getType() << "\n";
+				//				outs()<<"Struct name: "<<containedType->getContainedType(0)->getStructName()<<"\n";
+				//				// trying to print the pointer shared pointer is pointing to 
+				//				assert(containedType->getContainedType(0));
+				//				// Now getting the contained types and it's shared pointers like following,
+				//				// Contained Pointer Type:%"class.std::__shared_ptr.113" = type { %"class.mqtt::delivery_token"*, %"class.std::__shared_count" }
+				//				Type *containedPointerType = containedType->getContainedType(0);
+				//				outs()<< "Contained Pointer Type:" << *containedPointerType <<"\n";
+				//				assert(containedType->isStructTy());
+				//				outs()<<"First type: "<< *containedPointerType->getContainedType(0)<<"\n";
+				//				// So, the 1st type of 1st pointer is extracted, looks like -  %"class.mqtt::delivery_token"*
+				//				Type *firstType = containedPointerType->getContainedType(0);
+				//				assert(firstType->isPointerTy());
+
+				//				// Now getting the value pointer from shared value pointer
+				//				Value *sharedPtrValue = builder.CreateLoad(v->getType()->getContainedType(0)->getContainedType(0), v);
+				//				Value *containedPtrValue = builder.CreateExtractValue(sharedPtrValue, {0});
+
+				//				llvm::Value *firstPtrValue = builder.CreateLoad(firstType, containedPtrValue);
+				//				outs()<<"firstPtr value: "<<*firstPtrValue<<"\n";
+				//				//argsV.push_back(firstPtrValue);
+				//				argsV.push_back(builder.CreateGlobalStringPtr("This is msg part", ""));
+				//			}
+				//			else{
+				//				llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+				//				outs()<<"loadedValue: "<<*loadedValue<<"\n";
+				//	                	//argsV.push_back(loadedValue);
+				//				argsV.push_back(builder.CreateGlobalStringPtr("This is msg part", ""));
+				//			}
+				//			continue;
+				//	        }
+				//		argsV.push_back(v);
+
+				//	}
 					
 					//for (auto &v : arg_values) {
 					//        //argsV.push_back(builder.CreateGlobalStringPtr(v->getName(), ""));

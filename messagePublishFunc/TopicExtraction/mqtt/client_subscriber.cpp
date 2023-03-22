@@ -24,7 +24,8 @@ public:
     }
 
     void message_arrived(mqtt::const_message_ptr msg) override {
-	std::cout << "msg: " << msg << std::endl;
+	//std::cout << "msg: " << msg << std::endl;
+	printf("Message Topic: %s\n", msg->get_topic().c_str());
         std::cout << "Message received on topic: " << msg->get_topic() << std::endl;
         std::cout << "Message content: " << msg->to_string() << std::endl;
     }
