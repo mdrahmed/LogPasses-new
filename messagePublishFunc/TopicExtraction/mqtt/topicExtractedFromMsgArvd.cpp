@@ -1,4 +1,4 @@
-// Type is extracted in typeExtractionPass.cpp, so, I am trying to get the value pointer the shared pointer is pointing to with this pass.
+// Topic from message_arrived is extracted using this pass, don't compile the publisher for now, just use the publisher present here
 
 #include <unordered_set>
 #include <unordered_map>
@@ -69,8 +69,8 @@ bool CPSTracker::runOnModule(Module &M) {
 			arg_values.push_back(i);
 		}
 	
-		if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("connection_lost") || F.getName().contains("delivery_complete")){
-		//if(F.getName().contains("message_arrived")){
+		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("connection_lost") || F.getName().contains("delivery_complete")){
+		if(F.getName().contains("message_arrived")){
 			// If a function is declared then it will not have basic blocks in them. So, if a function is not delcared then it will have basic block, which I need to insert printf
 			if(!F.isDeclaration()){
 				auto &BB = F.getEntryBlock();        
