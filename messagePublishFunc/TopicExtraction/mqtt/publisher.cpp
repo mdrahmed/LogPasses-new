@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 
         std::string payload = "Hello, MQTT!";
         mqtt::message_ptr pubmsg = mqtt::make_message(TOPIC, payload);
+	std::cout << "Topic: " << pubmsg->get_topic() << std::endl;
         pubmsg->set_qos(0);
         client.publish(pubmsg)->wait();
         std::cout << "Published message: " << payload << std::endl;

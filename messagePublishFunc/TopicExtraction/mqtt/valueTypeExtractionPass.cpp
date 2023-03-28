@@ -228,8 +228,8 @@ bool CPSTracker::runOnModule(Module &M) {
 							auto containedType = v->getType()->getContainedType(0);
 							outs()<<"Contained type(0): "<<*v->getType()->getContainedType(0)<<"\n";
 							// If Contained type returns shared pointer then the contained contained type is a structure
-							//outs()<<"Contained contained type: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
-							//outs()<<"Struct name: "<<containedType->getStructName()<<"\n";
+							outs()<<"Contained contained type: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
+							outs()<<"Struct name: "<<containedType->getStructName()<<"\n";
 							if (containedType->getStructName().startswith("class.std::shared_ptr")) {
 								//argsV.push_back(builder.CreateGlobalStringPtr("This is msg part 1", ""));
 								outs() << "Shared pointer type: " << *v->getType() << "\n";
@@ -246,24 +246,57 @@ bool CPSTracker::runOnModule(Module &M) {
 								Type *firstType = containedPointerType->getContainedType(0);
 								assert(firstType->isPointerTy());
 
-								// converting firstType to string from Type
-								std::string typeName;
-								raw_string_ostream rso(typeName);
-								firstType->print(rso);
-								rso.flush();
-								outs()<<"Type: "<<typeName.find("class.mqtt::message") <<"\n";
-								// Calling the get_topic() to from msg
-								if(typeName.find("class.mqtt::message") != std::string::npos){
-								      argsV.push_back(builder.CreateGlobalStringPtr("msg: class.mqtt::message", ""));
-								}
+								//llvm::Function* getTopicF = F.getParent()->getFunction("_ZNK4mqtt7message9get_topicB5cxx11Ev");
+								//assert(getTopicF);
+								//Value *topicStrPtr = builder.CreateCall(getTopicF, v);
+								//Value *loadedTopicStrPtr = builder.CreateLoad(topicStrPtr->getType()->getPointerElementType(),topicStrPtr);
+								//Value *topicCharPtr = builder.CreatePointerCast(loadedTopicStrPtr, builder.getInt8PtrTy());
+								//argsV.push_back(topicCharPtr);
+								//
+								//std::vector<Value*> printfArgs;
+								//printfArgs.push_back(builder.CreateGlobalStringPtr("Message Topic: %s\n"));
+								//printfArgs.push_back(topicCharPtr);
+								//builder.CreateCall(printfFunc, printfArgs, "tmp");
 
-								//// Now getting the value pointer from shared value pointer
+								//// converting firstType to string from Type
+								//std::string typeName;
+								//raw_string_ostream rso(typeName);
+								//firstType->print(rso);
+								//rso.flush();
+								//outs()<<"Type: "<<typeName.find("class.mqtt::message") <<"\n";
+								//// Calling the get_topic() to from msg
+								//if(typeName.find("class.mqtt::message") != std::string::npos){
+								//	//argsV.push_back(builder.CreateGlobalStringPtr("msg: class.mqtt::message", ""));
+								//	llvm::Function* getTopicFunc = F.getParent()->getFunction("_ZNK4mqtt7message9get_topicB5cxx11Ev");
+								//	outs()<<"get_topic:"<<getTopicFunc->getName()<<"\n";
+								//	outs()<<"Call:"<<*builder.CreateCall(getTopicFunc, v)<<"\n";
+
+								//	//builder.CreateCall(printfFunc, builder.CreateCall(getTopicFunc, v), "calltmp");
+								//	//llvm::Value *loadedValue = builder.CreateCall(getTopicFunc, v);
+								//	//outs()<<v->getName()<<"\n";
+								//	//std::string topic = builder.CreateCall(getTopicFunc, v); 
+								//	//const char* topic_cstr = topic.c_str();
+								//	//if(v != nullptr){
+								//	//	llvm::Value* arg0 = builder.CreateLoad(v->getType()->getPointerElementType(), v);
+								//	//	llvm::Value *topic = builder.CreateCall(getTopicFunc, {arg0});
+								//	//	outs()<<"v: "<<*v<<"\n";
+								//	//}
+								//	//llvm::Value *loadedValue = builder.CreateLoad(firstType->getPointerElementType(), v);
+								//	//argsV.push_back(loadedValue);
+								//}
+
+								//// Now getting the value pointer from shared value pointer using CreateGEP
 								//Value *sharedPtrValue = builder.CreateLoad(v->getType()->getContainedType(0)->getContainedType(0), v);
 								//Value *containedPtrValue = builder.CreateExtractValue(sharedPtrValue, {0});
 
-								//llvm::Value *firstPtrValue = builder.CreateLoad(firstType, containedPtrValue);
-								//outs()<<"firstPtr value: "<<*firstPtrValue<<"\n";
-								////argsV.push_back(firstPtrValue);
+								//llvm::Value *firstPtrValue = builder.CreateLoad(firstType->getPointerElementType(), builder.CreateGEP(v, {builder.getInt32(0), builder.getInt32(0)}));
+								llvm::Value *loadedV = builder.CreateLoad(v->getType()->getPointerElementType(), v);
+								//llvm::Value *firstPtrValue = builder.CreateLoad(firstType->getPointerElementType(), builder.CreateGEP(loadedV, {builder.getInt32(0), builder.getInt32(0)}));
+								llvm::Value *firstPtrValue = builder.CreateLoad(firstType, builder.CreateGEP(firstType->getPointerElementType(), loadedV, {builder.getInt32(0), builder.getInt32(0)}));
+
+
+								outs()<<"firstPtr value: "<<*firstPtrValue<<"\n";
+								argsV.push_back(firstPtrValue);
 								////argsV.push_back(builder.CreateGlobalStringPtr("This is msg part 1", ""));
 							}
 							else{

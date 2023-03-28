@@ -7,17 +7,23 @@ CLANG=clang++-14
 PASS=instrument.so
 #PASS_SRC=stringExtractPass.cpp ## This pass will extract string, now trying to extrat content of shared pointer
 #PASS_SRC=typeExtractedPass.cpp ## extracted type using this pass
-PASS_SRC=valueTypeExtractionPass.cpp
+#PASS_SRC=valueTypeExtractionPass.cpp ## Contains all functions
+PASS_SRC=.topicExtractedFromMsgArvd.cpp ## This pass will extract topic from message_arrived function but using the predefined functions
 LL=client.ll
+#CPP_file=client_subscriber.cpp
+CPP_file=publisher.cpp
+
 MODIFIED=modified.ll
-CPP_file=client_subscriber.cpp
-#CPP_file=publisher.cpp
+BC_FILE=m.bc
+OBJ=m.o
+binary=m
+
 ifeq ($(CPP_file),client_subscriber.cpp)
 	EXE=subscriber
 else
 	EXE=publisher
 endif
-Objects=$(EXE) instrument.so *.ll
+Objects=$(EXE) instrument.so *.ll $(binary) $(BC_FILE) $(OBJ) 
 
 all: $(LL) $(PASS) $(EXE) $(MODIFIED)
 	
@@ -33,6 +39,12 @@ $(EXE): $(CPP_file)
 
 $(MODIFIED): $(LL)
 	$(CLANG) -o $@ -S -emit-llvm -fno-discard-value-names -flegacy-pass-manager -g -Xclang -load -Xclang ./instrument.so $<
+
+modified:
+	#@echo "Running instructions for mytarget"
+	llvm-as-14 $(MODIFIED) -o $(BC_FILE)
+	llc-14 -filetype=obj $(BC_FILE) -o $(OBJ)
+	$(CLANG) $(OBJ) -o $(binary) -no-pie -lpaho-mqttpp3  -lpaho-mqtt3c -lpaho-mqtt3a -lmosquitto
 
 .PHONY: clean
 clean:
