@@ -52,15 +52,47 @@ bool CPSTracker::runOnModule(Module &M) {
         std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
-
 	for (auto &F:M){
 		for (BasicBlock &BB : F) {
+			bool hasPrintf = false;
 			for(Instruction &I: BB){
-				if(auto *callInst = dyn_cast<CallInst>(&I)) {
-					Function *calledFunction = callInst->getCalledFunction();
-					if(calledFunction){
-						errs()<<"Function:"<<calledFunction->getName()<<" called by "<<F.getName()<<"\n";
+				BasicBlock::iterator IP = BB.getFirstInsertionPt();
+                        	IRBuilder<> builder(&I);
+				if(auto *brInst = dyn_cast<BranchInst>(&I)){
+					if(brInst -> isConditional()) {
+						outs() << "Found conditional branch in function " << F.getName() << ":\n";
+          					brInst->print(outs());
+          					outs() << "\n";
+						outs()<<"In this block: "<<BB<<"\n";
 					}
+				}
+				if(auto *callInst = dyn_cast<CallInst>(&I)) {
+					outs() << "Found call instruction in function " << F.getName() << ":\n";
+					Function *calledFunction = callInst->getCalledFunction();
+					//if(calledFunction == "printf")break;
+					outs()<<"Found callInst:"<<*callInst<<"\n";
+					//if(calledFunction){
+					//	outs()<<"Function:"<<calledFunction->getName()<<" called by "<<F.getName()<<"\n";
+					//}
+					if (calledFunction && calledFunction->getName() != "printf") {
+          					outs() << "Found call instruction in function " << F.getName() << ":\n";
+          					callInst->print(outs());
+          					if (callInst->getType()->isVoidTy()) {
+          						outs() << "This function does not return a value\n";
+          					} 
+						else {
+          						outs() << "This function returns a value of type " << *(callInst->getType()) << "\n";
+							//auto *loadInst = new LoadInst(callInst, "", false, &I);
+							if (callInst == BB.getTerminator()) {
+							    builder.SetInsertPoint(&BB, ++BB.end());
+							} else {
+							    builder.SetInsertPoint(&BB, ++I.getIterator());
+							}
+							Value *str = builder.CreateGlobalStringPtr("test\n", "str");
+                        				std::vector<Value *> argsV({str});
+                        				builder.CreateCall(printfFunc, argsV, "calltmp");
+						}
+          				}
 				}
 			}
 		}
