@@ -54,7 +54,7 @@ bool CPSTracker::runOnModule(Module &M) {
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
 	for (auto &F:M){
 		for (BasicBlock &BB : F) {
-			bool hasPrintf = false;
+			bool isConditional = false;
 			for(Instruction &I: BB){
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
                         	IRBuilder<> builder(&I);
@@ -64,17 +64,20 @@ bool CPSTracker::runOnModule(Module &M) {
           					brInst->print(outs());
           					outs() << "\n";
 						outs()<<"In this block: "<<BB<<"\n";
+
 					}
 				}
 				if(auto *callInst = dyn_cast<CallInst>(&I)) {
 					outs() << "Found call instruction in function " << F.getName() << ":\n";
 					Function *calledFunction = callInst->getCalledFunction();
-					//if(calledFunction == "printf")break;
 					outs()<<"Found callInst:"<<*callInst<<"\n";
+
 					//if(calledFunction){
 					//	outs()<<"Function:"<<calledFunction->getName()<<" called by "<<F.getName()<<"\n";
 					//}
 					if (calledFunction && calledFunction->getName() != "printf") {
+						//StringRef functionName = calledFunction->getName();
+						//outs()<<"Called function: "<<calledFunction->getName() <<"\n";
           					outs() << "Found call instruction in function " << F.getName() << ":\n";
           					callInst->print(outs());
           					if (callInst->getType()->isVoidTy()) {
@@ -88,9 +91,17 @@ bool CPSTracker::runOnModule(Module &M) {
 							} else {
 							    builder.SetInsertPoint(&BB, ++I.getIterator());
 							}
-							Value *str = builder.CreateGlobalStringPtr("test\n", "str");
+							Value *str = builder.CreateGlobalStringPtr("Function: \n", "str");
+							//// This part will add only the value
                         				std::vector<Value *> argsV({str});
-                        				builder.CreateCall(printfFunc, argsV, "calltmp");
+							//argsV.push_back(callInst);
+							argsV.push_back( builder.CreateGlobalStringPtr(F.getName()) );
+							argsV.push_back( builder.CreateGlobalStringPtr(calledFunction->getName()) );
+							Value *value = builder.CreateGlobalStringPtr(" value: ", "value");
+							argsV.push_back(value);
+							argsV.push_back(callInst);
+							
+							builder.CreateCall(printfFunc, argsV, "calltmp");
 						}
           				}
 				}
