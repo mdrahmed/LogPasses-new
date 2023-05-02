@@ -142,6 +142,7 @@ bool CPSTracker::runOnModule(Module &M) {
 				//isConditional = false;
 				//}
 			}
+			
 			for(Instruction &I: BB){
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
                         	IRBuilder<> builder(&I);
@@ -170,19 +171,57 @@ bool CPSTracker::runOnModule(Module &M) {
 								    builder.SetInsertPoint(&BB, ++I.getIterator());
 								}
 								std::string formatCallInst("Calling: ");
-                                        			formatCallInst += "%s %s value %s\n";
+                                        			formatCallInst += "%s %s ";
+                                        			//formatCallInst += " value %s\n";
 								Value *str = builder.CreateGlobalStringPtr(formatCallInst, "str");
 								//// This part will add only the value
                         					std::vector<Value *> argsV({str});
 								//argsV.push_back(callInst);
 								argsV.push_back( builder.CreateGlobalStringPtr(F.getName()) );
 								argsV.push_back( builder.CreateGlobalStringPtr(calledFunction->getName()) );
-								//Value *value = builder.CreateGlobalStringPtr(" value: ", "value");
-								//formatCallInst += " value %s\n";
-								//argsV.push_back(value);
-								argsV.push_back(callInst);
-								
 								builder.CreateCall(printfFunc, argsV, "calltmp");
+
+								//std::string formatValue(" Value: ");
+								//formatValue += " %s\n";
+								//Value *value = builder.CreateGlobalStringPtr(formatValue, "value");
+								//std::vector<Value *> argsValue({value});
+								////argsValue.push_back(value);
+								//argsValue.push_back(callInst);
+								//builder.CreateCall(printfFunc, argsValue, "value");
+
+								// ADDING THE CALLINST VALUES HERE
+								std::string intV("callInst_values: ");
+                                        			//for (size_t i = 0; i < arg_values.size(); ++i) {
+                                        			intV += "%d\n";
+                                        			//}
+                                        			Value *intVal = builder.CreateGlobalStringPtr(intV, "");
+                                        			std::vector<Value *> callV({intVal});
+                                        			// If I simply push the values then it works fine but I have to get values for arm-32 bit.
+                                        			// That's why I am bitcasting the values to a 32-bit result and then pushing it. But only this part is causing the error.
+                                        			// Worked with 32 bit int and then all values except pointer and array worked
+                                        			//for (auto &v : arg_values) {
+								const DataLayout &DL = M.getDataLayout();
+                                        			unsigned SourceBitWidth = DL.getTypeSizeInBits(callInst->getType());
+                                        			//unsigned SourceBitWidth = cast<IntegerType>(v->getType())->getBitWidth();;
+                                        			IntegerType *IntTy = builder.getIntNTy(SourceBitWidth);
+                                        			//Value *IntResult = builder.CreateBitCast(v, IntTy);
+                                        			Value *IntResult;
+                                        			if(callInst->getType()->isArrayTy()){
+                                        			        continue;
+                                        			}
+                                        			if(callInst->getType()->isPointerTy()){
+                                        			        IntResult = builder.CreatePtrToInt(callInst, IntTy);
+                                        			        //llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+                                        			        //callV.push_back(loadedValue);
+                                        			        //continue;
+                                        			}
+                                        			else{
+                                        			        IntResult = builder.CreateBitCast(callInst, IntTy);
+                                        			}
+                                        			Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
+                                        			//llvm_unreachable("Invalid type for cast");
+                                        			callV.push_back(Int32Result);
+                                        			builder.CreateCall(printfFunc, callV, "calltmp");
 							}
           					}
 					}
@@ -195,19 +234,69 @@ bool CPSTracker::runOnModule(Module &M) {
 						} else {
 						    builder.SetInsertPoint(&BB, ++I.getIterator());
 						}
-						std::string formatLoadInst("Global Variable: ");
+						//Value* PointerOperand = loadInst->getPointerOperand();
+						//outs()<<"PointerOperand: "<<*PointerOperand<<"\n";
+						//AllocaInst* Alloca = dyn_cast<AllocaInst>(PointerOperand);
+						//if (Alloca) {
+						//    StringRef Name = Alloca->getName();
+						//    outs() << "Pointer name: " << Name << "\n";
+						//}
+
+						//outs()<<"loadInst: "<<*loadInst<<"\n";
+						std::string loadStr;
+						raw_string_ostream loadStream(loadStr);
+						loadInst->print(loadStream);
+
+						std::string formatLoadInst("Global Variable: %s\n");
                                                 //formatLoadInst += "%s\n";
 						Value *str = builder.CreateGlobalStringPtr(formatLoadInst, "global");
-						std::vector<Value *> argsV({str});
-						argsV.push_back(loadInst);
-
+						Value *loadName = builder.CreateGlobalStringPtr(loadStr, "alloc");
+						std::vector<Value *> argsV({str, loadName});
+						//argsV.push_back(builder.CreateGlobalStringPtr(loadInst) );
+						
+						//argsV.push_back(loadInst);
 						builder.CreateCall(printfFunc, argsV, "globalVariables");
+							
+						// ADDING THE LOADINST VALUES HERE
+						std::string intV("loadInst_values: ");
+                                        	//for (size_t i = 0; i < arg_values.size(); ++i) {
+                                        	intV += "%d\n";
+                                        	//}
+                                        	Value *intVal = builder.CreateGlobalStringPtr(intV, "");
+                                        	std::vector<Value *> callV({intVal});
+                                        	// If I simply push the values then it works fine but I have to get values for arm-32 bit.
+                                        	// That's why I am bitcasting the values to a 32-bit result and then pushing it. But only this part is causing the error.
+                                        	// Worked with 32 bit int and then all values except pointer and array worked
+                                        	//for (auto &v : arg_values) {
+						const DataLayout &DL = M.getDataLayout();
+                                        	unsigned SourceBitWidth = DL.getTypeSizeInBits(loadInst->getType());
+                                        	//unsigned SourceBitWidth = cast<IntegerType>(v->getType())->getBitWidth();;
+                                        	IntegerType *IntTy = builder.getIntNTy(SourceBitWidth);
+                                        	//Value *IntResult = builder.CreateBitCast(v, IntTy);
+                                        	Value *IntResult;
+                                        	if(loadInst->getType()->isArrayTy()){
+                                        	        continue;
+                                        	}
+                                        	if(loadInst->getType()->isPointerTy()){
+                                        	        IntResult = builder.CreatePtrToInt(loadInst, IntTy);
+                                        	        //llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+                                        	        //callV.push_back(loadedValue);
+                                        	        //continue;
+                                        	}
+                                        	else{
+                                        	        IntResult = builder.CreateBitCast(loadInst, IntTy);
+                                        	}
+                                        	Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
+                                        	//llvm_unreachable("Invalid type for cast");
+                                        	callV.push_back(Int32Result);
+                                        	builder.CreateCall(printfFunc, callV, "calltmp");
 					}
 					else if(TruncInst *truncInst = dyn_cast<TruncInst>(&I)){
 						//outs()<<"Found TruncInst: "<<*truncInst<<"\n";
 					}
 				}
 			}
+			
 		}
 	}
         return true;

@@ -100,47 +100,6 @@ bool CPSTracker::runOnModule(Module &M) {
 						}
 					}
 				}
-				//if(isConditional){
-				//if(auto *callInst = dyn_cast<CallInst>(&I)) {
-				//	outs() << "Found call instruction in function " << F.getName() << ":\n";
-				//	Function *calledFunction = callInst->getCalledFunction();
-				//	outs()<<"Found callInst:"<<*callInst<<"\n";
-
-				//	//if(calledFunction){
-				//	//	outs()<<"Function:"<<calledFunction->getName()<<" called by "<<F.getName()<<"\n";
-				//	//}
-				//	if (calledFunction && calledFunction->getName() != "printf") {
-				//		//StringRef functionName = calledFunction->getName();
-				//		//outs()<<"Called function: "<<calledFunction->getName() <<"\n";
-          			//		outs() << "Found call instruction in function " << F.getName() << ":\n";
-          			//		callInst->print(outs());
-          			//		if (callInst->getType()->isVoidTy()) {
-          			//			outs() << "This function does not return a value\n";
-          			//		} 
-				//		else {
-          			//			outs() << "This function returns a value of type " << *(callInst->getType()) << "\n";
-				//			//auto *loadInst = new LoadInst(callInst, "", false, &I);
-				//			if (callInst == BB.getTerminator()) {
-				//			    builder.SetInsertPoint(&BB, ++BB.end());
-				//			} else {
-				//			    builder.SetInsertPoint(&BB, ++I.getIterator());
-				//			}
-				//			Value *str = builder.CreateGlobalStringPtr("Function: \n", "str");
-				//			//// This part will add only the value
-                        	//			std::vector<Value *> argsV({str});
-				//			//argsV.push_back(callInst);
-				//			argsV.push_back( builder.CreateGlobalStringPtr(F.getName()) );
-				//			argsV.push_back( builder.CreateGlobalStringPtr(calledFunction->getName()) );
-				//			Value *value = builder.CreateGlobalStringPtr(" value: ", "value");
-				//			argsV.push_back(value);
-				//			argsV.push_back(callInst);
-				//			
-				//			builder.CreateCall(printfFunc, argsV, "calltmp");
-				//		}
-          			//	}
-				//}
-				//isConditional = false;
-				//}
 			}
 			for(Instruction &I: BB){
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
@@ -170,7 +129,7 @@ bool CPSTracker::runOnModule(Module &M) {
 								    builder.SetInsertPoint(&BB, ++I.getIterator());
 								}
 								std::string formatCallInst("Calling: ");
-                                        			formatCallInst += "%s %s value %s\n";
+                                        			formatCallInst += "%s %s ";
 								Value *str = builder.CreateGlobalStringPtr(formatCallInst, "str");
 								//// This part will add only the value
                         					std::vector<Value *> argsV({str});
@@ -181,8 +140,41 @@ bool CPSTracker::runOnModule(Module &M) {
 								//formatCallInst += " value %s\n";
 								//argsV.push_back(value);
 								argsV.push_back(callInst);
-								
 								builder.CreateCall(printfFunc, argsV, "calltmp");
+
+								// adding the callInst values here
+								std::string intV("callInst_values: ");
+                                        			//for (size_t i = 0; i < arg_values.size(); ++i) {
+                                        			intV += "%d\n";
+                                        			//}
+                                        			Value *intVal = builder.CreateGlobalStringPtr(intV, "");
+                                        			std::vector<Value *> callV({intVal});
+                                        			// If I simply push the values then it works fine but I have to get values for arm-32 bit.
+                                        			// That's why I am bitcasting the values to a 32-bit result and then pushing it. But only this part is causing the error.
+                                        			// Worked with 32 bit int and then all values except pointer and array worked
+                                        			//for (auto &v : arg_values) {
+								const DataLayout &DL = M.getDataLayout();
+                                        			unsigned SourceBitWidth = DL.getTypeSizeInBits(callInst->getType());
+                                        			//unsigned SourceBitWidth = cast<IntegerType>(v->getType())->getBitWidth();;
+                                        			IntegerType *IntTy = builder.getIntNTy(SourceBitWidth);
+                                        			//Value *IntResult = builder.CreateBitCast(v, IntTy);
+                                        			Value *IntResult;
+                                        			if(callInst->getType()->isArrayTy()){
+                                        			        continue;
+                                        			}
+                                        			if(callInst->getType()->isPointerTy()){
+                                        			        IntResult = builder.CreatePtrToInt(callInst, IntTy);
+                                        			        //llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+                                        			        //callV.push_back(loadedValue);
+                                        			        //continue;
+                                        			}
+                                        			else{
+                                        			        IntResult = builder.CreateBitCast(callInst, IntTy);
+                                        			}
+                                        			Value *Int32Result = builder.CreateSExtOrTrunc(IntResult, Type::getInt32Ty(context));
+                                        			//llvm_unreachable("Invalid type for cast");
+                                        			callV.push_back(Int32Result);
+                                        			builder.CreateCall(printfFunc, callV, "calltmp");
 							}
           					}
 					}

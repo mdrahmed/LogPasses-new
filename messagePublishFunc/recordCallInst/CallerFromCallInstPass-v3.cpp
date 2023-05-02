@@ -142,6 +142,7 @@ bool CPSTracker::runOnModule(Module &M) {
 				//isConditional = false;
 				//}
 			}
+			
 			for(Instruction &I: BB){
 				BasicBlock::iterator IP = BB.getFirstInsertionPt();
                         	IRBuilder<> builder(&I);
@@ -170,19 +171,23 @@ bool CPSTracker::runOnModule(Module &M) {
 								    builder.SetInsertPoint(&BB, ++I.getIterator());
 								}
 								std::string formatCallInst("Calling: ");
-                                        			formatCallInst += "%s %s value %s\n";
+                                        			formatCallInst += "%s %s ";
+                                        			//formatCallInst += " value %s\n";
 								Value *str = builder.CreateGlobalStringPtr(formatCallInst, "str");
 								//// This part will add only the value
                         					std::vector<Value *> argsV({str});
 								//argsV.push_back(callInst);
 								argsV.push_back( builder.CreateGlobalStringPtr(F.getName()) );
 								argsV.push_back( builder.CreateGlobalStringPtr(calledFunction->getName()) );
-								//Value *value = builder.CreateGlobalStringPtr(" value: ", "value");
-								//formatCallInst += " value %s\n";
-								//argsV.push_back(value);
-								argsV.push_back(callInst);
-								
 								builder.CreateCall(printfFunc, argsV, "calltmp");
+
+								//std::string formatValue(" Value: ");
+								//formatValue += " %s\n";
+								//Value *value = builder.CreateGlobalStringPtr(formatValue, "value");
+								//std::vector<Value *> argsValue({value});
+								////argsValue.push_back(value);
+								//argsValue.push_back(callInst);
+								//builder.CreateCall(printfFunc, argsValue, "value");
 							}
           					}
 					}
@@ -195,12 +200,27 @@ bool CPSTracker::runOnModule(Module &M) {
 						} else {
 						    builder.SetInsertPoint(&BB, ++I.getIterator());
 						}
-						std::string formatLoadInst("Global Variable: ");
+						//Value* PointerOperand = loadInst->getPointerOperand();
+						//outs()<<"PointerOperand: "<<*PointerOperand<<"\n";
+						//AllocaInst* Alloca = dyn_cast<AllocaInst>(PointerOperand);
+						//if (Alloca) {
+						//    StringRef Name = Alloca->getName();
+						//    outs() << "Pointer name: " << Name << "\n";
+						//}
+
+						//outs()<<"loadInst: "<<*loadInst<<"\n";
+						std::string loadStr;
+						raw_string_ostream loadStream(loadStr);
+						loadInst->print(loadStream);
+
+						std::string formatLoadInst("Global Variable: %s\n");
                                                 //formatLoadInst += "%s\n";
 						Value *str = builder.CreateGlobalStringPtr(formatLoadInst, "global");
-						std::vector<Value *> argsV({str});
-						argsV.push_back(loadInst);
-
+						Value *loadName = builder.CreateGlobalStringPtr(loadStr, "alloc");
+						std::vector<Value *> argsV({str, loadName});
+						//argsV.push_back(builder.CreateGlobalStringPtr(loadInst) );
+						
+						//argsV.push_back(loadInst);
 						builder.CreateCall(printfFunc, argsV, "globalVariables");
 					}
 					else if(TruncInst *truncInst = dyn_cast<TruncInst>(&I)){
@@ -208,6 +228,7 @@ bool CPSTracker::runOnModule(Module &M) {
 					}
 				}
 			}
+			
 		}
 	}
         return true;
