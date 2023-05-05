@@ -55,6 +55,17 @@ bool CPSTracker::runOnModule(Module &M) {
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
 
+	// Declare the function signature - c_str()
+	//Type *stringClassType = StructType::create(context, "class.std::__cxx11::basic_string");
+	Type *stringClassType = StructType::getTypeByName(context, "class.std::__cxx11::basic_string");
+	Type *stringClassPtrType = stringClassType->getPointerTo();
+	FunctionType *cstrType = FunctionType::get(Type::getInt8PtrTy(context), stringClassPtrType, false);
+	Function *cstrFunc = Function::Create(cstrType, Function::ExternalLinkage, "_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv", &M);
+	outs()<<"c_str: "<<*cstrFunc<<"\n";
+	//auto* shrd = StructType::getTypeByName(context, "class.std::__shared_ptr_access.143");
+	//if(shrd)
+	//	outs()<<"14 is present: "<<*shrd<<"\n";
+
 	for (auto &F:M){
 		std::vector<std::string> arg_strings;
 		std::vector<Value*> arg_values; // used to store functions argument values
@@ -191,7 +202,6 @@ bool CPSTracker::runOnModule(Module &M) {
 									llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
 									Value *topicStr = builder.CreateCall(c_str, topicStrPtr);
 									argsV.push_back(topicStr);
-
 									
 									//// Create a FunctionType for c_str() that takes a pointer to i8 and returns a pointer to i8
 									//auto* cStrFnType = FunctionType::get(PointerType::getUnqual(Type::getInt8Ty(context)), {PointerType::getUnqual(Type::getInt8Ty(context))}, false);

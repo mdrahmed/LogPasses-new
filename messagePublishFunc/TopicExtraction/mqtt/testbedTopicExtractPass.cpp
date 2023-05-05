@@ -1,4 +1,4 @@
-// trying to get topic from publish
+// Topic from message_arrived is extracted using this pass, don't compile the publisher for now, just use the publisher present here
 
 #include <unordered_set>
 #include <unordered_map>
@@ -70,8 +70,7 @@ bool CPSTracker::runOnModule(Module &M) {
 		}
 	
 		//if(F.getName().contains("message_arrived") || F.getName().contains("publish") || F.getName().contains("connection_lost") || F.getName().contains("delivery_complete")){
-		if(F.getName().contains("make_message") || F.getName().contains("message_arrived")){
-			//outs()<<"make_message found\n";
+		if(F.getName().contains("message_arrived") || F.getName().contains("make_message")){
 			// If a function is declared then it will not have basic blocks in them. So, if a function is not delcared then it will have basic block, which I need to insert printf
 			if(!F.isDeclaration()){
 				auto &BB = F.getEntryBlock();        
@@ -91,7 +90,16 @@ bool CPSTracker::runOnModule(Module &M) {
 					outs()<<"\nFunction name:"<<F.getName()<<"\n";
 				
 					for (auto &v : arg_values) {
-						if(v->getType()->isPointerTy()){
+						if(v->getType()->isArrayTy()){
+							continue;
+						//	auto *ArrayTy = dyn_cast<ArrayType>(v->getType());
+       						//	auto NumElements = ArrayTy->getNumElements();
+       						//	auto *NewArrayType = ArrayType::get(ArrayTy->getElementType(), NumElements);
+       						//	auto *NewIntArrayType = ArrayType::get(builder.getIntNTy(SourceBitWidth), NumElements);
+       						//	auto *NewArray = builder.CreateBitCast(v, NewArrayType);
+       						//	IntResult = builder.CreateBitCast(NewArray, NewIntArrayType);
+						}
+						else if(v->getType()->isPointerTy()){
 							outs()<<"Just v:"<< *v <<"\n";
 							outs()<<"Pointer type:"<< *v->getType() <<"\n";
 							auto containedType = v->getType()->getContainedType(0);
@@ -99,10 +107,10 @@ bool CPSTracker::runOnModule(Module &M) {
 							outs()<<"Contained type is struct type: "<<containedType->isStructTy()<<"\n";
 							outs()<<"Contained contained type: "<<*containedType->getContainedType(0)<<"\n";
 							outs()<<"Contained contained type struct: "<<containedType->getContainedType(0)->isStructTy()<<"\n";
-							// This part is for the class.std::shared_ptr
-							/*
 							if (containedType->getStructName().startswith("class.std::shared_ptr")) {
+							    // This part checks if v is an actual object, not necessarily required here, but yet given to ensure the type of v
 								outs()<<"Contained Pointer Struct name: "<<containedType->getContainedType(0)->getStructName()<<"\n";
+								// trying to print the pointer shared pointer is pointing to 
 								assert(containedType->getContainedType(0));
 								// Now getting the contained types and it's shared pointers like following,
 								// Contained Pointer Type:%"class.std::__shared_ptr.113" = type { %"class.mqtt::delivery_token"*, %"class.std::__shared_count" }
@@ -118,18 +126,25 @@ bool CPSTracker::runOnModule(Module &M) {
 								outs()<<"v type to pointerElement type:"<<*v->getType()->getPointerElementType()<<"\n";
 								outs()<<"firstType pointer element type: "<<*firstType->getPointerElementType()<<"\n";
 
-								auto* sharedPtrAccessType = StructType::getTypeByName(context, "class.std::__shared_ptr_access.14");
-
+								// MAKING __shared_ptr_access type from __shared_ptr
+								//std::vector<Type*> fields = { Type::getInt8Ty(context)};
+								//auto* sharedPtrAccessType = StructType::create(context, "class.std::__shared_ptr_access.14");
+								
+								// the "class.std::__shared_ptr_access.14" is for demo program
+								//auto* sharedPtrAccessType = StructType::getTypeByName(context, "class.std::__shared_ptr_access.14");
+								// For testbed shared pointer is "class.std::__shared_ptr_access.43"
+								auto* sharedPtrAccessType = StructType::getTypeByName(context,"class.std::__shared_ptr_access.43");
+ 
 								//if(sharedPtrAccessPointerType != null){  // CHECK IF IT'S NULL
 								auto* sharedPtrAccessPointerType = PointerType::getUnqual(sharedPtrAccessType);
 								//auto* sharedPtrAccessPointerType = PointerType::getUnqual("class.std::__shared_ptr_access.14");
 								auto* bitcast = builder.CreateBitCast(v, sharedPtrAccessPointerType, "bitcast");
+								//auto* bitcast = builder.CreateBitCast(v, sharedPtrAccessPointerType, "bitcast");
 								
 								// JUST CALLING SAME FUNCTIONS LIKE MQTT DOES
-								Function* mqttMsgFn = F.getParent()->getFunction("_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv");
+								llvm::Function* mqttMsgFn = F.getParent()->getFunction("_ZNKSt19__shared_ptr_accessIKN4mqtt7messageELN9__gnu_cxx12_Lock_policyE2ELb0ELb0EEptEv");
 								if(mqttMsgFn){
 									assert(mqttMsgFn);
-									outs() <<"mqttMsgFn: "<<mqttMsgFn<<"\n";
 									Value *msgClass = builder.CreateCall(mqttMsgFn, bitcast);
 									//argsV.push_back(msgClass);
 									outs()<<"msgClass: "<< *msgClass <<"\n";
@@ -144,19 +159,9 @@ bool CPSTracker::runOnModule(Module &M) {
 									llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
 									Value *topicStr = builder.CreateCall(c_str, topicStrPtr);
 									argsV.push_back(topicStr);
-
-								}		
-							   
+								}
 							}
-							
-							else{
-								//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
-								outs()<<"loadedValue: "<<"\n";
-					                	//argsV.push_back(loadedValue);
-								//argsV.push_back(builder.CreateGlobalStringPtr("This is msg part 1", ""));
-							}
-							*/
-							if (containedType->getStructName().startswith("class.mqtt::buffer_ref")){
+							else if (containedType->getStructName().startswith("class.mqtt::buffer_ref")){
 								//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
 								//llvm::Function* getTopicFn = F.getParent()->getFunction("_ZNK4mqtt7message9get_topicB5cxx11Ev");
 								//Value *topicStrPtr = builder.CreateCall(getTopicFn, v);
@@ -165,15 +170,21 @@ bool CPSTracker::runOnModule(Module &M) {
 								//argsV.push_back(topicStr);
 
 								// Calling the present c_str()
-                                llvm::Function* c_str = F.getParent()->getFunction("_ZNK4mqtt10buffer_refIcE5c_strEv");
-                                Value *topicStr = builder.CreateCall(c_str, v);
-                                argsV.push_back(topicStr);
+                                				llvm::Function* c_str = F.getParent()->getFunction("_ZNK4mqtt10buffer_refIcE5c_strEv");
+                                				Value *topicStr = builder.CreateCall(c_str, v);
+                                				argsV.push_back(topicStr);
 								//break;
 							}
+							else{
+								//llvm::Value *loadedValue = builder.CreateLoad(v->getType()->getPointerElementType(),v);
+								//outs()<<"loadedValue: "<<*loadedValue<<"\n";
+					                	//argsV.push_back(loadedValue);
+								argsV.push_back(builder.CreateGlobalStringPtr("No value", ""));
+							}
 							continue;
-					        }
-						argsV.push_back(v);
-
+					    }
+						//argsV.push_back(v);
+						argsV.push_back(builder.CreateGlobalStringPtr("Just testing", ""));
 					}
 					builder.CreateCall(printfFunc, argsV, "calltmp"); 
 				}
