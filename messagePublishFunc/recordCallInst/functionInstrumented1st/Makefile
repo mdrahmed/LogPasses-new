@@ -12,10 +12,7 @@ PASS=instrument.so
 #PASS_SRC=CallerFromCallInstPass-v4.cpp ## Using this pass to get the values from those callInsts 
 #PASS_SRC=CallerFromCallInstPass-v5.cpp ## Using the CallerFromCallInstPass-v4.cpp pass and removing the unnecessary parts - but it doesn't have the loadInt instruction
 #PASS_SRC=CallerFromCallInstPass-v6.cpp ## LOGGED THE CALLINST VALUES WITH CALLINST AND LOADINST INSTRUCTIONS
-## CallerFromCallInstPass-v6.1.cpp is working properly but not getting the caller. So created v7, which is add printf to functions first and then create the conditional instructions
-#PASS_SRC=CallerFromCallInstPass-v6.1.cpp ## Copy of v6 but it is logging only function calls 
-PASS_SRC=CallerFromCallInstPass-v6.2.cpp ## Copy of v6 but it is also logging the condition calls 
-#PASS_SRC=CallerFromCallInstPass-v7.cpp ## Copy of v6.1 but trying to log the functions first as the callInst will have values but the functions will not have values => I AM USING THE EXECUTABLES, SO, ALL THOSE FUNCTIONS SHOULD BE LOGGED
+PASS_SRC=CallerFromCallInstPass-v6.1.cpp ## Copy of v6 but it is logging only function calls 
 #PASS_SRC=CallerFromCallInstPass-v7.cpp ## Copy of CallerFromCallInstPass-v6.cpp and only logging CallInst Functions => It logs all CallInst functions
 
 LL=callers.ll

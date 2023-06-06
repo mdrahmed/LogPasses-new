@@ -28,39 +28,14 @@
 using namespace llvm;
  
 namespace {
-	// write a runOnfunction here
+
   class CPSTracker : public ModulePass {
 
     public:
 
       static char ID;
       CPSTracker() : ModulePass(ID) { }
-	
-      /*
-      bool runOnFunction(Function &F) {
-	llvm::Module *M = F.getParent();
-	LLVMContext &context = M->getContext();
-        // Defining the printf function
-        Type *intType = Type::getInt32Ty(context);
-        std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
-        FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
-        auto printfFunc = M->getOrInsertFunction("printf", printfType);
 
-
-	auto &BB = F.getEntryBlock();
-	BasicBlock::iterator IP = BB.getFirstInsertionPt();
-	IRBuilder<> builder(&(*IP));
-	std::string formatFunc("Function1: ");
-        formatFunc += "%s\n";
-        //Value *functions = builder.CreateGlobalStringPtr("Function1: ", "func");
-        Value *functions = builder.CreateGlobalStringPtr(formatFunc, "func");
-        std::vector<Value *> func({functions});
-        func.push_back( builder.CreateGlobalStringPtr(F.getName()) );
-        builder.CreateCall(printfFunc, func, "function");
-
-      	return false;
-      }
-      */
       bool runOnModule(Module &M) override;
 
   };
@@ -77,16 +52,8 @@ bool CPSTracker::runOnModule(Module &M) {
         std::vector<Type *> printfArgsTypes({Type::getInt8PtrTy(context)});
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
-
 	for (auto &F:M){	
 		bool isFunc = true;
-		if(F.getName().contains("is_DIN")){
-			outs()<<"is_DIN:"<<F.getName()<<"\n";
-		}
-		else if(F.getName().contains("fsmStep")){
-			outs()<<"fsmStep:"<<F.getName()<<"\n";
-		}
-
 		for (BasicBlock &BB : F) {
 			bool ifCallInst = false;
 			bool ifTruncInst = false;
@@ -96,7 +63,7 @@ bool CPSTracker::runOnModule(Module &M) {
 				
 				IRBuilder<>builderF(&(*IP));
 				if(isFunc){
-					std::string formatFunc("Function2: ");
+					std::string formatFunc("Function: ");
                                         formatFunc += "%s\n";
 					//Value *functions = builder.CreateGlobalStringPtr("Function: ", "func");
 					Value *functions = builder.CreateGlobalStringPtr(formatFunc, "func");
