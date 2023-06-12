@@ -66,7 +66,7 @@ bool CPSTracker::runOnModule(Module &M) {
         std::vector<Value*> unixTime;
 
 	for (auto &F:M){	
-		if(F.getName().contains("llvm.dbg"))
+		if(F.getName().contains("llvm.dbg") || F.getName().contains("_ZNSaIc") || F.getName().contains("__gnu_cxx") || F.getName().contains("_ZNSt9basic_ios") || F.getName().contains("gthread_active") || F.getName().contains("__cxx1112basic_string") )
 			continue;
 		bool isFunc = true;
 
