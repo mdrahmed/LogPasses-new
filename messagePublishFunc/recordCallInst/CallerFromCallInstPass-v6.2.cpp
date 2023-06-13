@@ -22,6 +22,7 @@
 #include "llvm/IR/Type.h"
 #include "llvm/IR/DerivedTypes.h"
 #include "llvm/Support/Timer.h"
+#include <regex>
 
 #define NDEBUG
 
@@ -40,6 +41,30 @@ namespace {
 
   };
 
+}
+
+// Now, this function is correctly determining all the application level functions
+bool isDefinedInHeader(const llvm::Function* function) {
+  //outs()<<"All functions: "<<function->getName()<<"\n";
+  if (function) {
+    if (llvm::DISubprogram* subprogram = function->getSubprogram()) {
+      // Check if the function's source file name ends with a header extension
+      llvm::StringRef filename = subprogram->getFilename();
+      //if (filename.endswith(".h") || filename.endswith(".hpp") || filename.endswith(".hxx")) {
+      //  outs()<<"Header: "<<filename<<"\n";
+      //  return true;
+      //}
+      if (filename.endswith(".cpp") || filename.contains("deps/include/KeLibTxtDl.h") || filename.contains("deps/include/FtShmem.h") || filename.contains("deps/include/MQTTClient.h") || filename.contains("deps/include/MQTTAsync.h") || filename.contains("MQTTClientPersistence.h") || filename.contains("deps/include/freefare.h") ||
+	filename.contains("deps/include/mqtt/") || filename.contains("deps/include/json/") || filename.contains("deps/include/nfc/") ||
+	filename.contains("TxtSmartFactoryLib/include/") || filename.contains("TxtSmartFactoryLib/libs/")) {
+	  outs() << "Header: " << filename << "\n";
+	  outs() << "Functions: " <<function->getName() << "\n";
+	  return true;
+	}
+
+    }
+  }
+  return false;
 }
 
 char CPSTracker::ID = 0;
@@ -66,8 +91,13 @@ bool CPSTracker::runOnModule(Module &M) {
         std::vector<Value*> unixTime;
 
 	for (auto &F:M){	
-		if(F.getName().contains("llvm.dbg") || F.getName().contains("_ZNSaIc") || F.getName().contains("__gnu_cxx") || F.getName().contains("_ZNSt9basic_ios") || F.getName().contains("gthread_active") || F.getName().contains("__cxx1112basic_string") )
+		//if(F.getName().contains("llvm.dbg") || F.getName().contains("fmt") || F.getName().contains("_ZNSaIc") || F.getName().contains("__gnu_cxx") || F.getName().contains("_ZNSt9basic_ios") || F.getName().contains("gthread_active") || F.getName().contains("__cxx1112basic_string") || F.getName().contains("type_infoeq") || F.getName().contains("iterator_traits") || F.getName().contains("char_traits") || F.getName().contains("__cxx_global_var_") || F.getName().contains("basic_string_view") || F.getName().contains("spdlog") || F.getName().contains("chrono") || F.getName().contains("basic_memory_buffer") || F.getName().contains("internal12basic_buffer"))
+			//continue;
+		// Ignoring the init function for now, which is also a application level function
+		if(!isDefinedInHeader(&F) || F.getName().contains("cxx_global_var_init")){
 			continue;
+		}
+		outs()<<"Passed Function: "<<F.getName()<<"\n";
 		bool isFunc = true;
 
 		if(!F.isDeclaration()){
