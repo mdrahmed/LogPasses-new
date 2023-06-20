@@ -20,7 +20,10 @@ PASS=instrument.so
 # PASS_SRC=PubMsgArrWorked.cpp ## Publish is working here
 # PASS_SRC=IfConditionFinder.cpp #print the conditions for if and switch case
 # PASS_SRC=varAssignPass.cpp  ## This adds a printf inside the cpp code, which prints the store and alloc inst
-PASS_SRC=longPass.cpp
+PASS_SRC=longPass.cpp ## last used
+
+#PASS_SRC=CallerFromCallInstPass-v6.2.cpp ## I am not printing the Function: but in recordCallInst, it is printing this -- so, checking here => **I didn't clean the txt repo that's why make used earlier compiled files**
+
 LL=example.ll
 #CPP_file=example.cpp
 CPP_file=functionCallingEx.cpp

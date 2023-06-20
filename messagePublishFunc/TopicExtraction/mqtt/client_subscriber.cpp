@@ -25,10 +25,10 @@ public:
 
     void message_arrived(mqtt::const_message_ptr msg) override {
 	//std::cout << "msg topic addr: " << &msg->get_topic() << std::endl;
-	printf("Topic from src: %s\n", msg->get_topic().c_str());	
+	//printf("Topic from src: %s\n", msg->get_topic().c_str());	
 	//printf("Message Content Length: %lu\n", msg->get_payload().length());        
 	//std::cout << "Message received on topic: " << msg->get_topic() << std::endl;
-        //std::cout << "Message content: " << msg->to_string() << std::endl;
+        std::cout << "Message content: " << msg->to_string() << std::endl;
     }
 };
 

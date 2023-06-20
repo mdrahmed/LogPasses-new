@@ -96,8 +96,8 @@ bool CPSTracker::runOnModule(Module &M) {
 					//outs()<<"Found callInst:"<<*callInst<<"\n";
 					if(calledFunction){
 						if(calledFunction->getName().contains("get_topic")){
-							//outs()<<"get_topic CallInst:"<< *callInst<<"\n";
-							//outs()<<"get_topic:"<<calledFunction->getName()<<"\n";
+							outs()<<"get_topic CallInst:"<< *callInst<<"\n";
+							outs()<<"get_topic:"<<calledFunction->getName()<<"\n";
 							if (callInst == BB.getTerminator()) {
 							    builder.SetInsertPoint(&BB, ++BB.end());
 							} else {
