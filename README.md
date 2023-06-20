@@ -1,6 +1,8 @@
 # Log-passes
+[Note: Inside the Ubuntu-18 VM this Log-passes is present inside LLVM_passes in home dir]
 
-This are the most important passes I need to create a new loggin system. 
+
+This are the most important passes I need to create a new logging system. 
  - The GetFunctions pass will generate only the functions names of any file.
  - The GetFunctions&Values pass will generate all the the function names and values of any file.
  - The Functions&ValuesWithArguments pass will generate all the function names, values and arguments.
