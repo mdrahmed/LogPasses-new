@@ -16,7 +16,8 @@
 	./client_sub # in 1 terminal
 	./publisher # in another terminal
 	```
-	I will see the topic of publiser in that terminal where I ran `./publisher`
+	![subscriber](pics/subscriber.png)
+	I will see the topic of publiser in that terminal where I ran `./publisher`. The `publish get_topic value:  my/topic` is my instrumentation.
 
  - **[Well Functioning]**- Topic extracted from `message_arrived()` with following pass, - `topicExtractedtestbedCallInstpass.cpp`
 	```
@@ -27,7 +28,8 @@
 	./subscriber # in 1 terminal
 	./publisher # in another terminal
 	```
-	I will see the topic printed in the terminal where I ran `./subscriber`
+	I will see the topic printed in the terminal where I ran `./subscriber`. The `get_topic value:  my/topic` is my instrumentation.
+	**Check which `basic_string` is used. If it's the testbed code then it should be the generic `basic_string` but if it's the demo code then it should be `c_str` function.**
 
  - **[Well Functioning]** `CallInsts, CallInst values, global variable values` are logged with following pass,
 	```
