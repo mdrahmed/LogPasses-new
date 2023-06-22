@@ -3,12 +3,12 @@
 
 
 This are the most important passes I need, to create a new logging system. 
- - --[Well Functioning]-- Publish topic extracted from `make_message()` 2nd parameter.
+ - **[Well Functioning]** Publish topic extracted from `make_message()` 2nd parameter.
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/publishTpExtD/topicExtractedpublish-v2.cpp
 	```
 
- - --[Well Functioning]-- Topic extracted from `message_arrived()` with following pass,
+ - **[Well Functioning]**- Topic extracted from `message_arrived()` with following pass,
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/topicExtractedtestbedCallInstpass.cpp 
 	```
@@ -18,19 +18,19 @@ This are the most important passes I need, to create a new logging system.
 	./publisher # in another terminal
 	```
 
- - --[Well Functioning]-- `CallInsts, CallInst values, global variable values` are logged with following pass,
+ - **[Well Functioning]** `CallInsts, CallInst values, global variable values` are logged with following pass,
 	```
 	LogPasses-new/messagePublishFunc/recordCallInst/CallerFromCallInstPass-v6.2.cpp
 	# also present in,
 	LogPasses-new/FArVlCIGv-combined/CallerFromCallInstPass-v6.2.cpp
 	```
- - --[Well Functioning]-- `Function names, arguments and values` are logged with following pass,
+ - **[Well Functioning]** `Function names, arguments and values` are logged with following pass,
 	```
 	LogPasses-new/messagePublishFunc/longPass.cpp
 	# also present in 
 	LogPasses-new/FArVlCIGv-combined/longPass.cpp
 	```
- - --[Well Functioning]-- `Function names, arguments, values, callInsts, callInst values, global variable values` are logged with following pass,
+ - **[Well Functioning]** `Function names, arguments, values, callInsts, callInst values, global variable values` are logged with following pass,
 	```
 	LogPasses-new/FArVlCIGv-combined/longCaller-combined.cpp
 	```
