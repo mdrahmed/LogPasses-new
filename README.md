@@ -3,9 +3,14 @@
 
 
 This are the most important passes I need, to create a new logging system. 
+ - **[Well Functioning]** `message_arrived()` and `publish` topic are logged
+	```
+	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/msgAndPubTopic/bothTopicPass.cpp
+	```
+
  - **[Well Functioning]** Publish topic extracted from `make_message()` 2nd parameter.
 	```
-	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/publishTpExtD/topicExtractedpublish-v2.cpp
+	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/publishTpExtD/topicExtractedpublishPass-v3.cpp
 	```
 
  - **[Well Functioning]**- Topic extracted from `message_arrived()` with following pass,

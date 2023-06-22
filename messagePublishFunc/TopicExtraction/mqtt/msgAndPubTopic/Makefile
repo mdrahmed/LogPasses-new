@@ -11,10 +11,11 @@ PASS=instrument.so
 #PASS_SRC=topicExtractedmsgArvd.cpp    ## This is the pass to extract topic from message_arrived function.
 #PASS_SRC=topicExtractedpublishPass.cpp   ## This pass will extract topic from message_arrived function but using the predefined functions
 #PASS_SRC=topicExtractedpublishPass-v2.cpp   ## Modifying the topicExtractedpublish.cpp to find make_message call and then print the 1st parameter on it. => WORKED BUT WITH PREDEFINED c_str
-PASS_SRC=topicExtractedpublishPass-v3.cpp   ## Defining the c_str function 
+#PASS_SRC=topicExtractedpublishPass-v3.cpp   ## Defining the c_str function 
+PASS_SRC=bothTopicPass.cpp ## both of the topic are extracted
 #PASS_SRC=defineC_strPass.cpp ## trying to define c_str function
 #PASS_SRC=functionCallPass.cpp ## trying to call a simple function which is defined inside the pass
-LL=Publisher.ll
+LL=clientOrPublisher.ll
 #CPP_file=client_subscriber.cpp
 CPP_file=publisher.cpp
 

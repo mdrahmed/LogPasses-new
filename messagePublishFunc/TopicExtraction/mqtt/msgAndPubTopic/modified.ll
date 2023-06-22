@@ -1,4 +1,4 @@
-; ModuleID = 'Publisher.ll'
+; ModuleID = 'clientOrPublisher.ll'
 source_filename = "publisher.cpp"
 target datalayout = "e-m:e-p270:32:32-p271:32:32-p272:64:64-i64:64-f80:128-n8:16:32:64-S128"
 target triple = "x86_64-pc-linux-gnu"
@@ -212,7 +212,6 @@ target triple = "x86_64-pc-linux-gnu"
 %"class.__gnu_cxx::new_allocator.130" = type { i8 }
 %"struct.std::_Sp_ebo_helper.134" = type { i8 }
 %"class.std::__shared_ptr_access.14" = type { i8 }
-%"class.std::__cxx11::basic_string.0" = type opaque
 
 $_ZN8callbackC1Ev = comdat any
 
@@ -6485,8 +6484,6 @@ define internal void @_GLOBAL__sub_I_publisher.cpp() #0 section ".text.startup" 
 }
 
 declare i32 @printf(i8*, ...)
-
-declare i8* @c_str(%"class.std::__cxx11::basic_string.0"*)
 
 attributes #0 = { noinline uwtable "frame-pointer"="all" "min-legal-vector-width"="0" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
 attributes #1 = { "frame-pointer"="all" "no-trapping-math"="true" "stack-protector-buffer-size"="8" "target-cpu"="x86-64" "target-features"="+cx8,+fxsr,+mmx,+sse,+sse2,+x87" "tune-cpu"="generic" }
