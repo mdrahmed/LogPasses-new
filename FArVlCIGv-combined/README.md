@@ -1,8 +1,6 @@
-# Combining all important passes here
-Only need to add the topic pass which is present in,
-1. Topic from `message_arrived` - `topicExtractedtestbedCallInstpass.cpp`
-Location: `/home/raihan/LogPasses-new/messagePublishFunc/TopicExtraction/mqtt`
-2. Topic from `publish` - `topicExtractedtestbedpublishCallInstpass.cpp` => It's not done yet. If didn't use `get_topic()` rather makes the message with `make_message()`. The 1st parameter of this function is the topic. So, just print that using the logic from `CallerFromCallInstPass-v6.2.cpp`
+## Combining following 2 passes to print the function names, arguments, values, callInsts, global variables
+Working pass - `longCaller-combined.cpp`
+
 
 ### `CallInst` and `global variable` pass
 `CallerFromCallInstPass-v6.2.cpp` is a pass which is correctly logging the call instructions, global variables and functions defined only in the application/testbed code. 

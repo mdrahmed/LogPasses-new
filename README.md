@@ -1,19 +1,24 @@
 # Log-passes
 [Note: Inside the Ubuntu-18 VM this Log-passes is present inside LLVM_passes in home dir]
 
-
-This are the most important passes I need, to create a new logging system. 
- - **[Well Functioning]** `message_arrived()` and `publish` topic are logged
+## These are the most important passes I need, to create a new logging system. 
+ - **[Well Functioning]** `message_arrived()` and `publish` topic are logged - `bothTopicPass.cpp`
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/msgAndPubTopic/bothTopicPass.cpp
 	```
 
- - **[Well Functioning]** Publish topic extracted from `make_message()` 2nd parameter.
+ - **[Well Functioning]** `publish` topic extracted from `make_message()` 2nd parameter,  - `topicExtractedpublishPass-v3.cpp`
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/publishTpExtD/topicExtractedpublishPass-v3.cpp
 	```
+	run following cmd at that location to see the effect,
+	```
+	./client_sub # in 1 terminal
+	./publisher # in another terminal
+	```
+	I will see the topic of publiser in that terminal where I ran `./publisher`
 
- - **[Well Functioning]**- Topic extracted from `message_arrived()` with following pass,
+ - **[Well Functioning]**- Topic extracted from `message_arrived()` with following pass, - `topicExtractedtestbedCallInstpass.cpp`
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/topicExtractedtestbedCallInstpass.cpp 
 	```
@@ -22,6 +27,7 @@ This are the most important passes I need, to create a new logging system.
 	./subscriber # in 1 terminal
 	./publisher # in another terminal
 	```
+	I will see the topic printed in the terminal where I ran `./subscriber`
 
  - **[Well Functioning]** `CallInsts, CallInst values, global variable values` are logged with following pass,
 	```
