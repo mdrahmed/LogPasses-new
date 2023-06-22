@@ -104,7 +104,9 @@ bool CPSTracker::runOnModule(Module &M) {
 							    builder.SetInsertPoint(&BB, ++I.getIterator());
 							}
 
-							llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
+							//llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
+							//Following function will work in the testbed code as they have this function defined.
+							llvm::Function* c_str = F.getParent()->getFunction("_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv");
                                                         outs()<<"c_str(): "<< *c_str<<"\n";
 							Value *topicStr = builder.CreateCall(c_str, callInst);
                                                         //argsV.push_back(topicStr);

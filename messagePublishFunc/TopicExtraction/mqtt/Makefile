@@ -14,10 +14,12 @@ PASS=instrument.so
 #PASS_SRC=topicExtractedtestbedMsgArvd.cpp ## Trying to get_topic from message_arrived of testbed
 #PASS_SRC=topicExtractedtestbedMsgArvd-v2.cpp ## This is function pass conversion of module pass-topicExtractedtestbedMsgArvd.cpp copy 
 ## *** `topicExtractedtestbedCallInstpass.cpp` PASS EXTRACTED TOPIC FROM MESSAGE_ARRIVED FUNCTION.
-#PASS_SRC=topicExtractedtestbedCallInstpass.cpp ## TRYING TO EXTRACT TOPIC FROM A CALLINST WHICH IS CALLING GET_TOPIC() FUNCTION *** IT WORKED
+PASS_SRC=topicExtractedtestbedCallInstpass.cpp ## TRYING TO EXTRACT TOPIC FROM A CALLINST WHICH IS CALLING GET_TOPIC() FUNCTION *** IT WORKED
 #PASS_SRC=topicExtractedtestbedCallInstpass-v2.cpp ## Also trying to extract the message from message_arrived
 #PASS_SRC=topicExtractedtestbedpublishCallInstpass.cpp ## Trying to extract publish topic and msg from the publish functions
-PASS_SRC=declareGet_topicpass.cpp ## trying to declare get_topic function
+
+#PASS_SRC=declareGet_topicpass.cpp ## trying to declare get_topic function
+
 #PASS_SRC=testbedTopicExtractPass.cpp ## this will extract message_arrived() topic from the testbed
 #PASS_SRC=topicExtractedpublish.cpp   ## This pass will extract topic from message_arrived function but using the predefined functions
 #PASS_SRC=defineC_strPass.cpp  ## trying to define c_str function
@@ -39,6 +41,7 @@ pub=publisher.cpp
 sub_exe=client_sub
 pub_exe=pub
 
+# The instrumented topic code will present inside the `subscriber` for client 
 ifeq ($(CPP_file),client_subscriber.cpp)
 	EXE=subscriber
 else

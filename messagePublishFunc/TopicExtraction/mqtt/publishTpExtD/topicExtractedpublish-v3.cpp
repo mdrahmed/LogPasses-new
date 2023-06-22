@@ -55,6 +55,16 @@ bool CPSTracker::runOnModule(Module &M) {
         FunctionType *printfType = FunctionType::get(intType, printfArgsTypes, true);
         auto printfFunc = M.getOrInsertFunction("printf", printfType);
 
+	// c_str function
+	// Obtain the necessary types and context
+	Type* int8PtrType = Type::getInt8PtrTy(context);
+	StructType* stringType = StructType::create(context, "class.std::__cxx11::basic_string");
+	
+	// Create the function type
+	Type* stringPtrType = stringType->getPointerTo();
+	FunctionType* cStrFunctionType = FunctionType::get(int8PtrType, { stringPtrType }, false);
+	auto cStrFunction = M.getOrInsertFunction("c_str", cStrFunctionType);
+
 	for (auto &F:M){
 		std::vector<std::string> arg_strings;
 		std::vector<Value*> arg_values; // used to store functions argument values
@@ -96,7 +106,9 @@ bool CPSTracker::runOnModule(Module &M) {
 									outs()<<"2nd parameter: "<<*secondParam<<"\n";
 									outs()<<"param type: "<<*secondParam->getType()<<"\n";
 									llvm::Value* loadedValue = builder.CreateLoad(secondParam->getType()->getPointerElementType(), secondParam);
-									llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
+									//llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
+									llvm::Function* c_str = F.getParent()->getFunction("_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv");
+									//llvm::Function* c_str = F.getParent()->getFunction("c_str");
                                                         		outs()<<"c_str(): "<< *c_str<<"\n";
 									// secondParam is not giving any error
 									//Value *topicStr = builder.CreateCall(c_str, secondParam); // Whenever I am passing the callInst then it is giving error 
