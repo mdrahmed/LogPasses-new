@@ -1,5 +1,5 @@
 # Everything is logged
-## Following 2 passes are combined here - tfavcigvPass.cpp
+## Following 2 passes are combined here - `tfavcigvPass.cpp`
 	```
 	LogPasses-new/FAVCIGVT\*
 	```
