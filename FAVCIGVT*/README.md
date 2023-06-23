@@ -9,7 +9,7 @@ Variables names are also preserved with the `Makefile` of testbed. only added `-
 ```
 EXECUTEABLE_g++ =  clang++-14 --target=arm-linux-gnueabihf -fno-discard-value-names -flegacy-pass-manager -g -Xclang -load -Xclang /home/raihan/LogPasses-new/FAVCIGVT\*/instrument.so
 ```
-![Variables names are logged](pics/variable-names-preserved.png)				
+![Variables names are logged](../pics/variable-names-preserved.png)				
 
 1. This pass prints function names, arguments, values, callInsts, global variables - `longCaller-combined.cpp`
 Location: 
