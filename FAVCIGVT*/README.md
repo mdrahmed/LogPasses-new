@@ -1,7 +1,6 @@
 # Everything is logged
 ## Following 2 passes are combined here - `tfavcigvPass.cpp`
 
-Location:
 ```
 LogPasses-new/FAVCIGVT\*/tfavcigvPass.cpp
 ```
@@ -12,11 +11,11 @@ EXECUTEABLE_g++ =  clang++-14 --target=arm-linux-gnueabihf -fno-discard-value-na
 ```
 					
 
-This pass prints function names, arguments, values, callInsts, global variables - `longCaller-combined.cpp`
+1. This pass prints function names, arguments, values, callInsts, global variables - `longCaller-combined.cpp`
 Location: 
 ```
 LogPasses-new/FArVlCIGv-combined
 ```
 run `make clean` and `make` to see the effect.
 	
-To extract `message_arrived()` and `publish` topic use this pass `bothTopicPass.cpp` 
+2. To extract `message_arrived()` and `publish` topic use this pass `bothTopicPass.cpp` 
