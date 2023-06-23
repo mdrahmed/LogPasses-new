@@ -6,6 +6,12 @@
 	```
 	LogPasses-new/FAVCIGVT\*/tfavcigvPass.cpp
 	```
+	Variables names are also preserved with the `Makefile` of testbed. only added `-fno-discard-value-names`, following is the cmd,
+	```
+	EXECUTEABLE_g++ =  clang++-14 --target=arm-linux-gnueabihf -fno-discard-value-names -flegacy-pass-manager -g -Xclang -load -Xclang /home/raihan/LogPasses-new/FAVCIGVT\*/instrument.so
+	```
+	![Variables names are logged](pics/variable-names-preserved.png)
+
  - **[Well Functioning]** `message_arrived()` and `publish` topic are logged - `bothTopicPass.cpp`
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/msgAndPubTopic/bothTopicPass.cpp
