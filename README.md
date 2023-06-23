@@ -2,6 +2,10 @@
 [Note: Inside the Ubuntu-18 VM this Log-passes is present inside LLVM_passes in home dir]
 
 ## These are the most important passes I need, to create a new logging system. 
+ - **[Well Functioning] & EVERYTHING LOGGED in this order - Time, function names, arguments, arguments values, callInsts, callInsts values, global variable values** - `tfavcigvPass.cpp`
+	```
+	LogPasses-new/FAVCIGVT\*/tfavcigvPass.cpp
+	```
  - **[Well Functioning]** `message_arrived()` and `publish` topic are logged - `bothTopicPass.cpp`
 	```
 	LogPasses-new/messagePublishFunc/TopicExtraction/mqtt/msgAndPubTopic/bothTopicPass.cpp
@@ -34,6 +38,11 @@
 	I will see the topic printed in the terminal where I ran `./subscriber`. The `get_topic value:  my/topic` is my instrumentation.
 	**Check which `basic_string` is used. If it's the testbed code then it should be the generic `basic_string` but if it's the demo code then it should be `c_str` function.**
 
+ - **[Well Functioning]** `Function names, arguments, values, callInsts, callInst values, global variable values` are logged with following pass,
+	```
+	LogPasses-new/FArVlCIGv-combined/longCaller-combined.cpp
+	```
+
  - **[Well Functioning]** `CallInsts, CallInst values, global variable values` are logged with following pass,
 	```
 	LogPasses-new/messagePublishFunc/recordCallInst/CallerFromCallInstPass-v6.2.cpp
@@ -46,10 +55,7 @@
 	# also present in 
 	LogPasses-new/FArVlCIGv-combined/longPass.cpp
 	```
- - **[Well Functioning]** `Function names, arguments, values, callInsts, callInst values, global variable values` are logged with following pass,
-	```
-	LogPasses-new/FArVlCIGv-combined/longCaller-combined.cpp
-	```
+
  - The GetFunctions pass will generate only the functions names of any file.
  - The GetFunctions&Values pass will generate all the the function names and values of any file.
  - The Functions&ValuesWithArguments pass will generate all the function names, values and arguments.
