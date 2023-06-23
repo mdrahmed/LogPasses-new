@@ -1,6 +1,5 @@
 # Everything is logged
 ## Following 2 passes are combined here - tfavcigvPass.cpp
-	Location:
 	```
 	LogPasses-new/FAVCIGVT\*
 	```
@@ -9,7 +8,7 @@
 	```
 	EXECUTEABLE_g++ =  clang++-14 --target=arm-linux-gnueabihf -fno-discard-value-names -flegacy-pass-manager -g -Xclang -load -Xclang /home/raihan/LogPasses-new/FAVCIGVT\*/instrument.so
 	```
-	![Variables names are logged](../pics/variable-names-preserved.png)
+	#![Variables names are logged](../pics/variable-names-preserved.png)
 					
 
 This pass prints function names, arguments, values, callInsts, global variables - `longCaller-combined.cpp`
