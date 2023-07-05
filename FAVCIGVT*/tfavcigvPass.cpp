@@ -92,7 +92,7 @@ bool CPSTracker::runOnModule(Module &M) {
 
 	for (auto &F:M){
 		// Ignoring the init function for now, which is also a application level function
-		if(!isDefinedInHeader(&F) || F.getName().contains("cxx_global_var_init")){
+		if(!isDefinedInHeader(&F) || F.getName().contains("cxx_global_var_init") || F.getName().contains("creating_server_c")){
 			continue;
 		}
 		//outs()<<"Passed Function: "<<F.getName()<<"\n";
@@ -243,11 +243,16 @@ bool CPSTracker::runOnModule(Module &M) {
 					}
 					// Add string format specifier for each argument we will later print
 					for (size_t i = 0; i < arguments.size(); ++i) {
-						format += " %s\n";
+						if(i == arguments.size()-1){
+							format += " %s\n";
+						}
+						else
+							format += " %s ,";
 					}
 					if(arguments.size() == 1){
 						format += "None\n";
 					}
+					//format += "\n";
 					Value *str = builderF.CreateGlobalStringPtr(format, "");
 					std::vector<Value *> argsV({str});
 					// pushing values into argsV after creating a string pointer to arguments
@@ -263,7 +268,10 @@ bool CPSTracker::runOnModule(Module &M) {
 					std::string format("arg_values: ");
 					// outs()<<arg_values.size()<<"\n";
 					for (size_t i = 0; i < arg_values.size(); ++i) {
-						format += "%d\n";
+						if(i == arg_values.size()-1)
+							format += "%d\n";
+						else
+							format += "%d ,";
 					}
 					if(arg_values.size() == 0){
 						format += "None\n";
