@@ -11,6 +11,7 @@ EXECUTEABLE_g++ =  clang++-14 --target=arm-linux-gnueabihf -fno-discard-value-na
 ```
 ![Variables names are logged](../pics/variable-names-preserved.png)				
 
+**Passes:**
 1. This pass prints function names, arguments, values, callInsts, global variables - `longCaller-combined.cpp`
 Location: 
 ```
