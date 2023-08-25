@@ -160,7 +160,7 @@ bool CPSTracker::runOnModule(Module &M) {
       							Function *calledFunction = callInst->getCalledFunction();
       							if (calledFunction && calledFunction->getName().contains("make_message")) {
       								//outs()<<"Invoked function: "<<calledFunction->getName()<<"\n";
-      								outs()<<"Invoke inst: "<<*callInst<<"\n";
+      								//outs()<<"Invoke inst: "<<*callInst<<"\n";
       								if (callInst == BB.getTerminator()) {
       								    builder.SetInsertPoint(&BB, ++BB.end());
       								} else {
@@ -173,7 +173,7 @@ bool CPSTracker::runOnModule(Module &M) {
       								//llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
       								llvm::Function* c_str = F.getParent()->getFunction("_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv");
       								//llvm::Function* c_str = F.getParent()->getFunction("c_str");
-      								outs()<<"c_str(): "<< *c_str<<"\n";
+      								//outs()<<"c_str(): "<< *c_str<<"\n";
       								//secondParam is not giving any error
       								//Value *topicStr = builder.CreateCall(c_str, secondParam); // Whenever I am passing the callInst then it is giving error
       								Value *topicStr = builder.CreateCall(c_str, loadedValue); // Whenever I am passing the callInst then it is giving error
@@ -193,7 +193,7 @@ bool CPSTracker::runOnModule(Module &M) {
           					Function *calledFunction = callInst->getCalledFunction();
           				    if(calledFunction){
           				    	if(calledFunction->getName().contains("get_topic")){
-          				    		outs()<<"get_topic CallInst:"<< *callInst<<"\n";
+          				    		//outs()<<"get_topic CallInst:"<< *callInst<<"\n";
           				    		//outs()<<"get_topic:"<<calledFunction->getName()<<"\n";
           				    		if (callInst == BB.getTerminator()) {
           				    		    builder.SetInsertPoint(&BB, ++BB.end());
@@ -204,7 +204,7 @@ bool CPSTracker::runOnModule(Module &M) {
           				    		llvm::Function* c_str = F.getParent()->getFunction("_ZNKSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE5c_strEv");
           				    		//Following function will work in the testbed code as they have this function defined.
           				    		//llvm::Function* c_str = F.getParent()->getFunction("_ZNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEE13_M_local_dataEv");
-          				    		outs()<<"c_str(): "<< *c_str<<"\n";
+          				    		//outs()<<"c_str(): "<< *c_str<<"\n";
           				    		Value *topicStr = builder.CreateCall(c_str, callInst);
           				    		//argsV.push_back(topicStr);
 
@@ -479,7 +479,7 @@ bool CPSTracker::runOnModule(Module &M) {
 
 							if (calledFunction && calledFunction->getName() != "printf") {
 								if (callInst->getType()->isVoidTy()) {
-          							outs() << "This function does not return a value\n";
+          							//outs() << "This function does not return a value\n";
           							//continue;
 								} 
 								else {
