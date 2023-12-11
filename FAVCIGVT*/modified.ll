@@ -104,13 +104,12 @@ target triple = "x86_64-pc-linux-gnu"
 %"class.mqtt::unsubscribe_response" = type { %"class.mqtt::server_response", %"class.std::vector.51" }
 %"class.std::__cxx11::list" = type { %"class.std::__cxx11::_List_base" }
 %"class.std::__cxx11::_List_base" = type { %"struct.std::__cxx11::_List_base<std::shared_ptr<mqtt::token>, std::allocator<std::shared_ptr<mqtt::token>>>::_List_impl" }
-%"struct.std::__cxx11::_List_base<std::shared_ptr<mqtt::token>, std::allocator<std::shared_ptr<mqtt::token>>>::_List_impl" = type { %"struct.std::_List_node" }
-%"struct.std::_List_node" = type { %"struct.std::__detail::_List_node_base", %"struct.__gnu_cxx::__aligned_membuf" }
+%"struct.std::__cxx11::_List_base<std::shared_ptr<mqtt::token>, std::allocator<std::shared_ptr<mqtt::token>>>::_List_impl" = type { %"struct.std::__detail::_List_node_header" }
+%"struct.std::__detail::_List_node_header" = type { %"struct.std::__detail::_List_node_base", i64 }
 %"struct.std::__detail::_List_node_base" = type { %"struct.std::__detail::_List_node_base"*, %"struct.std::__detail::_List_node_base"* }
-%"struct.__gnu_cxx::__aligned_membuf" = type { [8 x i8] }
 %"class.std::__cxx11::list.68" = type { %"class.std::__cxx11::_List_base.69" }
 %"class.std::__cxx11::_List_base.69" = type { %"struct.std::__cxx11::_List_base<std::shared_ptr<mqtt::delivery_token>, std::allocator<std::shared_ptr<mqtt::delivery_token>>>::_List_impl" }
-%"struct.std::__cxx11::_List_base<std::shared_ptr<mqtt::delivery_token>, std::allocator<std::shared_ptr<mqtt::delivery_token>>>::_List_impl" = type { %"struct.std::_List_node" }
+%"struct.std::__cxx11::_List_base<std::shared_ptr<mqtt::delivery_token>, std::allocator<std::shared_ptr<mqtt::delivery_token>>>::_List_impl" = type { %"struct.std::__detail::_List_node_header" }
 %"class.std::unique_ptr.73" = type { %"class.std::__uniq_ptr_impl.74" }
 %"class.std::__uniq_ptr_impl.74" = type { %"class.std::tuple.75" }
 %"class.std::tuple.75" = type { %"struct.std::_Tuple_impl.76" }
@@ -165,7 +164,7 @@ target triple = "x86_64-pc-linux-gnu"
 %union.anon.111 = type { i8* }
 %"class.mqtt::iclient_persistence" = type { i32 (...)** }
 %"class.std::__shared_ptr_access.17" = type { i8 }
-%"struct.std::chrono::duration.116" = type { i64 }
+%"struct.std::chrono::duration.115" = type { i64 }
 %struct.timespec = type { i64, i64 }
 %"class.std::__shared_ptr_access.14" = type { i8 }
 %"class.std::shared_ptr.112" = type { %"class.std::__shared_ptr.113" }
@@ -175,8 +174,8 @@ target triple = "x86_64-pc-linux-gnu"
 %"class.std::__shared_ptr_access" = type { i8 }
 %"class.std::allocator.108" = type { i8 }
 %"class.__gnu_cxx::new_allocator.109" = type { i8 }
-%"struct.std::_Rb_tree_node" = type { %"struct.std::_Rb_tree_node_base", %"struct.__gnu_cxx::__aligned_membuf.115" }
-%"struct.__gnu_cxx::__aligned_membuf.115" = type { [64 x i8] }
+%"struct.std::_Rb_tree_node" = type { %"struct.std::_Rb_tree_node_base", %"struct.__gnu_cxx::__aligned_membuf" }
+%"struct.__gnu_cxx::__aligned_membuf" = type { [64 x i8] }
 %"class.std::allocator.102" = type { i8 }
 %"struct.std::pair" = type { %"class.std::__cxx11::basic_string", %"class.std::__cxx11::basic_string" }
 %"class.__gnu_cxx::new_allocator.103" = type { i8 }
@@ -1175,13 +1174,13 @@ define linkonce_odr dso_local void @_ZNSt11this_thread9sleep_forIlSt5ratioILl1EL
   %2 = alloca %"struct.std::chrono::duration"*, align 8
   %3 = alloca %"struct.std::chrono::duration", align 8
   %4 = alloca %"struct.std::chrono::duration", align 8
-  %5 = alloca %"struct.std::chrono::duration.116", align 8
+  %5 = alloca %"struct.std::chrono::duration.115", align 8
   %6 = alloca %"struct.std::chrono::duration", align 8
   %7 = alloca %struct.timespec, align 8
   store %"struct.std::chrono::duration"* %0, %"struct.std::chrono::duration"** %2, align 8
   %8 = load %"struct.std::chrono::duration"*, %"struct.std::chrono::duration"** %2, align 8
   %9 = load %"struct.std::chrono::duration"*, %"struct.std::chrono::duration"** %2, align 8
-  %10 = call i64 @_ZNSt6chrono8durationIlSt5ratioILl1ELl1EEE4zeroEv()
+  %10 = call i64 @_ZNSt6chrono8durationIlSt5ratioILl1ELl1EEE4zeroEv() #3
   %11 = getelementptr inbounds %"struct.std::chrono::duration", %"struct.std::chrono::duration"* %3, i32 0, i32 0
   store i64 %10, i64* %11, align 8
   %12 = call noundef zeroext i1 @_ZNSt6chronoleIlSt5ratioILl1ELl1EElS2_EEbRKNS_8durationIT_T0_EERKNS3_IT1_T2_EE(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %8, %"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %3)
@@ -1200,13 +1199,13 @@ define linkonce_odr dso_local void @_ZNSt11this_thread9sleep_forIlSt5ratioILl1EL
   %20 = getelementptr inbounds %"struct.std::chrono::duration", %"struct.std::chrono::duration"* %6, i32 0, i32 0
   store i64 %19, i64* %20, align 8
   %21 = call i64 @_ZNSt6chrono13duration_castINS_8durationIlSt5ratioILl1ELl1000000000EEEElS2_ILl1ELl1EEEENSt9enable_ifIXsr13__is_durationIT_EE5valueES7_E4typeERKNS1_IT0_T1_EE(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %6)
-  %22 = getelementptr inbounds %"struct.std::chrono::duration.116", %"struct.std::chrono::duration.116"* %5, i32 0, i32 0
+  %22 = getelementptr inbounds %"struct.std::chrono::duration.115", %"struct.std::chrono::duration.115"* %5, i32 0, i32 0
   store i64 %21, i64* %22, align 8
   %23 = getelementptr inbounds %struct.timespec, %struct.timespec* %7, i32 0, i32 0
   %24 = call noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1ELl1EEE5countEv(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %4)
   store i64 %24, i64* %23, align 8
   %25 = getelementptr inbounds %struct.timespec, %struct.timespec* %7, i32 0, i32 1
-  %26 = call noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1ELl1000000000EEE5countEv(%"struct.std::chrono::duration.116"* noundef nonnull align 8 dereferenceable(8) %5)
+  %26 = call noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1ELl1000000000EEE5countEv(%"struct.std::chrono::duration.115"* noundef nonnull align 8 dereferenceable(8) %5)
   store i64 %26, i64* %25, align 8
   br label %27
 
@@ -2302,7 +2301,7 @@ define linkonce_odr dso_local noundef %"struct.std::pair"* @_ZNSt13_Rb_tree_node
   store %"struct.std::_Rb_tree_node"* %0, %"struct.std::_Rb_tree_node"** %2, align 8
   %3 = load %"struct.std::_Rb_tree_node"*, %"struct.std::_Rb_tree_node"** %2, align 8
   %4 = getelementptr inbounds %"struct.std::_Rb_tree_node", %"struct.std::_Rb_tree_node"* %3, i32 0, i32 1
-  %5 = call noundef %"struct.std::pair"* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE6_M_ptrEv(%"struct.__gnu_cxx::__aligned_membuf.115"* noundef nonnull align 8 dereferenceable(64) %4) #3
+  %5 = call noundef %"struct.std::pair"* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE6_M_ptrEv(%"struct.__gnu_cxx::__aligned_membuf"* noundef nonnull align 8 dereferenceable(64) %4) #3
   ret %"struct.std::pair"* %5
 }
 
@@ -2331,21 +2330,21 @@ define linkonce_odr dso_local void @_ZNSt4pairIKNSt7__cxx1112basic_stringIcSt11c
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define linkonce_odr dso_local noundef %"struct.std::pair"* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE6_M_ptrEv(%"struct.__gnu_cxx::__aligned_membuf.115"* noundef nonnull align 8 dereferenceable(64) %0) #6 comdat align 2 {
-  %2 = alloca %"struct.__gnu_cxx::__aligned_membuf.115"*, align 8
-  store %"struct.__gnu_cxx::__aligned_membuf.115"* %0, %"struct.__gnu_cxx::__aligned_membuf.115"** %2, align 8
-  %3 = load %"struct.__gnu_cxx::__aligned_membuf.115"*, %"struct.__gnu_cxx::__aligned_membuf.115"** %2, align 8
-  %4 = call noundef i8* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE7_M_addrEv(%"struct.__gnu_cxx::__aligned_membuf.115"* noundef nonnull align 8 dereferenceable(64) %3) #3
+define linkonce_odr dso_local noundef %"struct.std::pair"* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE6_M_ptrEv(%"struct.__gnu_cxx::__aligned_membuf"* noundef nonnull align 8 dereferenceable(64) %0) #6 comdat align 2 {
+  %2 = alloca %"struct.__gnu_cxx::__aligned_membuf"*, align 8
+  store %"struct.__gnu_cxx::__aligned_membuf"* %0, %"struct.__gnu_cxx::__aligned_membuf"** %2, align 8
+  %3 = load %"struct.__gnu_cxx::__aligned_membuf"*, %"struct.__gnu_cxx::__aligned_membuf"** %2, align 8
+  %4 = call noundef i8* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE7_M_addrEv(%"struct.__gnu_cxx::__aligned_membuf"* noundef nonnull align 8 dereferenceable(64) %3) #3
   %5 = bitcast i8* %4 to %"struct.std::pair"*
   ret %"struct.std::pair"* %5
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define linkonce_odr dso_local noundef i8* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE7_M_addrEv(%"struct.__gnu_cxx::__aligned_membuf.115"* noundef nonnull align 8 dereferenceable(64) %0) #6 comdat align 2 {
-  %2 = alloca %"struct.__gnu_cxx::__aligned_membuf.115"*, align 8
-  store %"struct.__gnu_cxx::__aligned_membuf.115"* %0, %"struct.__gnu_cxx::__aligned_membuf.115"** %2, align 8
-  %3 = load %"struct.__gnu_cxx::__aligned_membuf.115"*, %"struct.__gnu_cxx::__aligned_membuf.115"** %2, align 8
-  %4 = getelementptr inbounds %"struct.__gnu_cxx::__aligned_membuf.115", %"struct.__gnu_cxx::__aligned_membuf.115"* %3, i32 0, i32 0
+define linkonce_odr dso_local noundef i8* @_ZN9__gnu_cxx16__aligned_membufISt4pairIKNSt7__cxx1112basic_stringIcSt11char_traitsIcESaIcEEES7_EE7_M_addrEv(%"struct.__gnu_cxx::__aligned_membuf"* noundef nonnull align 8 dereferenceable(64) %0) #6 comdat align 2 {
+  %2 = alloca %"struct.__gnu_cxx::__aligned_membuf"*, align 8
+  store %"struct.__gnu_cxx::__aligned_membuf"* %0, %"struct.__gnu_cxx::__aligned_membuf"** %2, align 8
+  %3 = load %"struct.__gnu_cxx::__aligned_membuf"*, %"struct.__gnu_cxx::__aligned_membuf"** %2, align 8
+  %4 = getelementptr inbounds %"struct.__gnu_cxx::__aligned_membuf", %"struct.__gnu_cxx::__aligned_membuf"* %3, i32 0, i32 0
   %5 = bitcast [64 x i8]* %4 to i8*
   ret i8* %5
 }
@@ -2920,16 +2919,26 @@ define linkonce_odr dso_local noundef zeroext i1 @_ZNSt6chronoleIlSt5ratioILl1EL
   ret i1 %8
 }
 
-; Function Attrs: mustprogress noinline optnone uwtable
-define linkonce_odr dso_local i64 @_ZNSt6chrono8durationIlSt5ratioILl1ELl1EEE4zeroEv() #7 comdat align 2 {
+; Function Attrs: mustprogress noinline nounwind optnone uwtable
+define linkonce_odr dso_local i64 @_ZNSt6chrono8durationIlSt5ratioILl1ELl1EEE4zeroEv() #6 comdat align 2 personality i8* bitcast (i32 (...)* @__gxx_personality_v0 to i8*) {
   %1 = alloca %"struct.std::chrono::duration", align 8
   %2 = alloca i64, align 8
-  %3 = call noundef i64 @_ZNSt6chrono15duration_valuesIlE4zeroEv()
+  %3 = call noundef i64 @_ZNSt6chrono15duration_valuesIlE4zeroEv() #3
   store i64 %3, i64* %2, align 8
-  call void @_ZNSt6chrono8durationIlSt5ratioILl1ELl1EEEC2IlvEERKT_(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %1, i64* noundef nonnull align 8 dereferenceable(8) %2)
-  %4 = getelementptr inbounds %"struct.std::chrono::duration", %"struct.std::chrono::duration"* %1, i32 0, i32 0
-  %5 = load i64, i64* %4, align 8
-  ret i64 %5
+  invoke void @_ZNSt6chrono8durationIlSt5ratioILl1ELl1EEEC2IlvEERKT_(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %1, i64* noundef nonnull align 8 dereferenceable(8) %2)
+          to label %4 unwind label %7
+
+4:                                                ; preds = %0
+  %5 = getelementptr inbounds %"struct.std::chrono::duration", %"struct.std::chrono::duration"* %1, i32 0, i32 0
+  %6 = load i64, i64* %5, align 8
+  ret i64 %6
+
+7:                                                ; preds = %0
+  %8 = landingpad { i8*, i32 }
+          catch i8* null
+  %9 = extractvalue { i8*, i32 } %8, 0
+  call void @__clang_call_terminate(i8* %9) #15
+  unreachable
 }
 
 ; Function Attrs: mustprogress noinline optnone uwtable
@@ -2948,14 +2957,14 @@ define linkonce_odr dso_local i64 @_ZNSt6chrono13duration_castINS_8durationIlSt5
 
 ; Function Attrs: mustprogress noinline optnone uwtable
 define linkonce_odr dso_local i64 @_ZNSt6chrono13duration_castINS_8durationIlSt5ratioILl1ELl1000000000EEEElS2_ILl1ELl1EEEENSt9enable_ifIXsr13__is_durationIT_EE5valueES7_E4typeERKNS1_IT0_T1_EE(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %0) #7 comdat {
-  %2 = alloca %"struct.std::chrono::duration.116", align 8
+  %2 = alloca %"struct.std::chrono::duration.115", align 8
   %3 = alloca %"struct.std::chrono::duration"*, align 8
   store %"struct.std::chrono::duration"* %0, %"struct.std::chrono::duration"** %3, align 8
   %4 = load %"struct.std::chrono::duration"*, %"struct.std::chrono::duration"** %3, align 8
   %5 = call i64 @_ZNSt6chrono20__duration_cast_implINS_8durationIlSt5ratioILl1ELl1000000000EEEES2_ILl1000000000ELl1EElLb0ELb1EE6__castIlS2_ILl1ELl1EEEES4_RKNS1_IT_T0_EE(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %4)
-  %6 = getelementptr inbounds %"struct.std::chrono::duration.116", %"struct.std::chrono::duration.116"* %2, i32 0, i32 0
+  %6 = getelementptr inbounds %"struct.std::chrono::duration.115", %"struct.std::chrono::duration.115"* %2, i32 0, i32 0
   store i64 %5, i64* %6, align 8
-  %7 = getelementptr inbounds %"struct.std::chrono::duration.116", %"struct.std::chrono::duration.116"* %2, i32 0, i32 0
+  %7 = getelementptr inbounds %"struct.std::chrono::duration.115", %"struct.std::chrono::duration.115"* %2, i32 0, i32 0
   %8 = load i64, i64* %7, align 8
   ret i64 %8
 }
@@ -2999,11 +3008,11 @@ define linkonce_odr dso_local noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1E
 }
 
 ; Function Attrs: mustprogress noinline nounwind optnone uwtable
-define linkonce_odr dso_local noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1ELl1000000000EEE5countEv(%"struct.std::chrono::duration.116"* noundef nonnull align 8 dereferenceable(8) %0) #6 comdat align 2 {
-  %2 = alloca %"struct.std::chrono::duration.116"*, align 8
-  store %"struct.std::chrono::duration.116"* %0, %"struct.std::chrono::duration.116"** %2, align 8
-  %3 = load %"struct.std::chrono::duration.116"*, %"struct.std::chrono::duration.116"** %2, align 8
-  %4 = getelementptr inbounds %"struct.std::chrono::duration.116", %"struct.std::chrono::duration.116"* %3, i32 0, i32 0
+define linkonce_odr dso_local noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1ELl1000000000EEE5countEv(%"struct.std::chrono::duration.115"* noundef nonnull align 8 dereferenceable(8) %0) #6 comdat align 2 {
+  %2 = alloca %"struct.std::chrono::duration.115"*, align 8
+  store %"struct.std::chrono::duration.115"* %0, %"struct.std::chrono::duration.115"** %2, align 8
+  %3 = load %"struct.std::chrono::duration.115"*, %"struct.std::chrono::duration.115"** %2, align 8
+  %4 = getelementptr inbounds %"struct.std::chrono::duration.115", %"struct.std::chrono::duration.115"* %3, i32 0, i32 0
   %5 = load i64, i64* %4, align 8
   ret i64 %5
 }
@@ -3074,7 +3083,7 @@ define linkonce_odr dso_local i64 @_ZNSt6chrono20__duration_cast_implINS_8durati
 
 ; Function Attrs: mustprogress noinline optnone uwtable
 define linkonce_odr dso_local i64 @_ZNSt6chrono20__duration_cast_implINS_8durationIlSt5ratioILl1ELl1000000000EEEES2_ILl1000000000ELl1EElLb0ELb1EE6__castIlS2_ILl1ELl1EEEES4_RKNS1_IT_T0_EE(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %0) #7 comdat align 2 {
-  %2 = alloca %"struct.std::chrono::duration.116", align 8
+  %2 = alloca %"struct.std::chrono::duration.115", align 8
   %3 = alloca %"struct.std::chrono::duration"*, align 8
   %4 = alloca i64, align 8
   store %"struct.std::chrono::duration"* %0, %"struct.std::chrono::duration"** %3, align 8
@@ -3082,20 +3091,20 @@ define linkonce_odr dso_local i64 @_ZNSt6chrono20__duration_cast_implINS_8durati
   %6 = call noundef i64 @_ZNKSt6chrono8durationIlSt5ratioILl1ELl1EEE5countEv(%"struct.std::chrono::duration"* noundef nonnull align 8 dereferenceable(8) %5)
   %7 = mul nsw i64 %6, 1000000000
   store i64 %7, i64* %4, align 8
-  call void @_ZNSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEC2IlvEERKT_(%"struct.std::chrono::duration.116"* noundef nonnull align 8 dereferenceable(8) %2, i64* noundef nonnull align 8 dereferenceable(8) %4)
-  %8 = getelementptr inbounds %"struct.std::chrono::duration.116", %"struct.std::chrono::duration.116"* %2, i32 0, i32 0
+  call void @_ZNSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEC2IlvEERKT_(%"struct.std::chrono::duration.115"* noundef nonnull align 8 dereferenceable(8) %2, i64* noundef nonnull align 8 dereferenceable(8) %4)
+  %8 = getelementptr inbounds %"struct.std::chrono::duration.115", %"struct.std::chrono::duration.115"* %2, i32 0, i32 0
   %9 = load i64, i64* %8, align 8
   ret i64 %9
 }
 
 ; Function Attrs: noinline nounwind optnone uwtable
-define linkonce_odr dso_local void @_ZNSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEC2IlvEERKT_(%"struct.std::chrono::duration.116"* noundef nonnull align 8 dereferenceable(8) %0, i64* noundef nonnull align 8 dereferenceable(8) %1) unnamed_addr #5 comdat align 2 {
-  %3 = alloca %"struct.std::chrono::duration.116"*, align 8
+define linkonce_odr dso_local void @_ZNSt6chrono8durationIlSt5ratioILl1ELl1000000000EEEC2IlvEERKT_(%"struct.std::chrono::duration.115"* noundef nonnull align 8 dereferenceable(8) %0, i64* noundef nonnull align 8 dereferenceable(8) %1) unnamed_addr #5 comdat align 2 {
+  %3 = alloca %"struct.std::chrono::duration.115"*, align 8
   %4 = alloca i64*, align 8
-  store %"struct.std::chrono::duration.116"* %0, %"struct.std::chrono::duration.116"** %3, align 8
+  store %"struct.std::chrono::duration.115"* %0, %"struct.std::chrono::duration.115"** %3, align 8
   store i64* %1, i64** %4, align 8
-  %5 = load %"struct.std::chrono::duration.116"*, %"struct.std::chrono::duration.116"** %3, align 8
-  %6 = getelementptr inbounds %"struct.std::chrono::duration.116", %"struct.std::chrono::duration.116"* %5, i32 0, i32 0
+  %5 = load %"struct.std::chrono::duration.115"*, %"struct.std::chrono::duration.115"** %3, align 8
+  %6 = getelementptr inbounds %"struct.std::chrono::duration.115", %"struct.std::chrono::duration.115"* %5, i32 0, i32 0
   %7 = load i64*, i64** %4, align 8
   %8 = load i64, i64* %7, align 8
   store i64 %8, i64* %6, align 8

@@ -116,7 +116,7 @@ bool CPSTracker::runOnModule(Module &M) {
 			auto &BB = F.getEntryBlock();
 			BasicBlock::iterator IP = BB.getFirstInsertionPt();
       		IRBuilder<> builderF(&(*IP));
-	  		std::string formatFunc("FFF Function: ");
+	  		std::string formatFunc("Function: ");
       		formatFunc += "%s\n";
       		Value *functions = builderF.CreateGlobalStringPtr(formatFunc, "func");
       		std::vector<Value *> func({functions});
@@ -135,7 +135,7 @@ bool CPSTracker::runOnModule(Module &M) {
       		unixSs.str("");
 
       		// Unix time
-      		unixSs <<"F1 Unix: "<< now <<"\n";
+      		unixSs <<"Unix: "<< now <<"\n";
       		ts = unixSs.str();
       		unixT = builderF.CreateGlobalStringPtr(ts, "str");
       		unixTime.push_back(unixT);
