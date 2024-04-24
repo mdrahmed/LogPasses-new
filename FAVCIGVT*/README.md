@@ -30,7 +30,7 @@ clang++-14 publisher.cpp -o pub -lpaho-mqttpp3 -lpaho-mqtt3c -lpaho-mqtt3a -lmos
 Details are here: [MQTT & Mosquitto broker](https://docs.google.com/document/d/1NUTDBS5PnGsBR0BcgSc_4W4UopRmQgS1lQ7VCYrKe7s)
 Attack part is here: [Attaking Phase - V1](https://docs.google.com/document/d/1-QIt8StL0lqHEnB287lP3TYZrUJTkYs628ejDZAg5HU)
 
-
+# LOC
 ### Total line of codes
 Original file has 597 line of codes. Again,
 ```
