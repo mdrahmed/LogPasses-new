@@ -5,6 +5,7 @@ CLANG_LFL=$(shell llvm-config-14 --ldflags --libs)
 
 CLANG=clang++-14
 PASS=instrument.so
+PASS_ARM64=instrument_arm64.so
 #PASS_SRC=bothTopicPass.cpp ## both of the topic are extracted
 PASS_SRC=tfavcigvPass.cpp ## topic, function names, arguments, values, callInsts, callInsts values, global variable values are logged
 LL=clientOrPublisher.ll
@@ -28,15 +29,18 @@ ifeq ($(CPP_file),client_subscriber.cpp)
 else
 	EXE=publisher
 endif
-Objects=$(EXE) instrument.so *.ll $(binary) $(BC_FILE) $(OBJ) 
+Objects=$(EXE) instrument.so $(PASS_ARM64) *.ll $(binary) $(BC_FILE) $(OBJ) 
 
-all: $(LL) $(PASS) $(EXE) $(MODIFIED)
+all: $(LL) $(PASS) $(PASS_ARM64) $(EXE) $(MODIFIED)
 	
 $(LL): $(CPP_file)
 	$(CLANG) -o $@ -S -emit-llvm $<
 
 $(PASS): $(PASS_SRC)
 	$(CLANG) $(CLANG_CFL) -g -shared $< -o $@
+
+$(PASS_ARM64): $(PASS_SRC)
+	$(CLANG) --target=aarch64-linux-gnu $(CLANG_CFL) -g -shared $< -o $@
 
 $(EXE): $(CPP_file) 
 	#$(CLANG) -o $@ -lpaho-mqttpp3  -lpaho-mqtt3c -lpaho-mqtt3a -lmosquitto $< 	
